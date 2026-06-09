@@ -1,0 +1,13 @@
+# Local-development overrides.
+#
+# Redirects Technulgy-LGNU git dependencies to sibling checkouts under the
+# robocup/ workspace root during local dev.
+#
+# `core-dump` is a leaf crate: it has no Technulgy-LGNU cross-repo
+# dependencies, so there is currently nothing to patch. Add entries here in the
+# form below if that changes.
+#
+# Usage:  cargo <cmd> --config .cargo/local.toml
+#
+# [patch."https://github.com/Technulgy-LGNU/<repo>"]
+# <crate> = { path = "../<repo>" }
