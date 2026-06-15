@@ -1,5 +1,6 @@
-use num_traits::Zero;
 use crate::proto::{CpVector2, Vector2};
+use num_traits::Zero;
+use std::ops::Div;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -45,7 +46,8 @@ impl<T> Vec2<T> {
   }
 
   #[inline]
-  pub fn tp_cp_vec2(self) -> CpVector2 where
+  pub fn tp_cp_vec2(self) -> CpVector2
+  where
     T: Into<i32>,
   {
     CpVector2 {
@@ -64,7 +66,6 @@ impl<T: Default> Default for Vec2<T> {
   }
 }
 
-
 impl<T: Zero> Vec2<T> {
   pub fn zero() -> Self {
     Self {
@@ -74,6 +75,17 @@ impl<T: Zero> Vec2<T> {
   }
 }
 
+impl<T> Vec2<T>
+where
+  T: Div<Output = T> + Copy,
+{
+  pub fn divide_by_scale(self, scale: Vec2<T>) -> Self {
+    Self {
+      x: self.x / scale.x,
+      y: self.y / scale.y,
+    }
+  }
+}
 impl<T> Vec3<T> {
   #[inline]
   pub fn new(x: T, y: T, z: T) -> Self {

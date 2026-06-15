@@ -1,5 +1,5 @@
-use std::ops::{Add, Div, Mul, Sub};
 use crate::vec::types::{Vec2, Vec3};
+use std::ops::{Add, Div, Mul, Sub};
 
 impl<T> Add for Vec2<T>
 where

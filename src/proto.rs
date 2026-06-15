@@ -4,10 +4,10 @@
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RobotId {
   /// the robot number
-  #[prost(uint32, optional, tag="1")]
+  #[prost(uint32, optional, tag = "1")]
   pub id: Option<u32>,
   /// the team that the robot belongs to
-  #[prost(enumeration="Team", optional, tag="2")]
+  #[prost(enumeration = "Team", optional, tag = "2")]
   pub team: Option<i32>,
 }
 /// Team is either blue or yellow
@@ -76,19 +76,19 @@ impl Division {
 /// A vector with two dimensions
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Vector2 {
-  #[prost(float, required, tag="1")]
+  #[prost(float, required, tag = "1")]
   pub x: f32,
-  #[prost(float, required, tag="2")]
+  #[prost(float, required, tag = "2")]
   pub y: f32,
 }
 /// A vector with three dimensions
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Vector3 {
-  #[prost(float, required, tag="1")]
+  #[prost(float, required, tag = "1")]
   pub x: f32,
-  #[prost(float, required, tag="2")]
+  #[prost(float, required, tag = "2")]
   pub y: f32,
-  #[prost(float, required, tag="3")]
+  #[prost(float, required, tag = "3")]
   pub z: f32,
 }
 /// GameEvent contains exactly one game event
@@ -100,22 +100,25 @@ pub struct Vector3 {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GameEvent {
   /// A globally unique id of the game event.
-  #[prost(string, optional, tag="50")]
+  #[prost(string, optional, tag = "50")]
   pub id: Option<String>,
   /// The type of the game event.
-  #[prost(enumeration="game_event::Type", optional, tag="40")]
+  #[prost(enumeration = "game_event::Type", optional, tag = "40")]
   pub r#type: Option<i32>,
   /// The origins of this game event.
   /// Empty, if it originates from game controller.
   /// Contains autoRef name(s), if it originates from one or more autoRefs.
   /// Ignored if sent by autoRef to game controller.
-  #[prost(string, repeated, tag="41")]
+  #[prost(string, repeated, tag = "41")]
   pub origin: Vec<String>,
   /// Unix timestamp in microseconds when the event was created.
-  #[prost(uint64, optional, tag="49")]
+  #[prost(uint64, optional, tag = "49")]
   pub created_timestamp: Option<u64>,
   /// the event that occurred
-  #[prost(oneof="game_event::Event", tags="6, 7, 11, 19, 31, 43, 13, 17, 24, 26, 27, 51, 15, 18, 22, 21, 29, 28, 20, 39, 8, 44, 14, 5, 45, 2, 3, 32, 34, 37, 52, 38, 46, 48, 47, 35, 36, 1, 9, 10, 12, 16, 42, 23, 25, 30, 33")]
+  #[prost(
+    oneof = "game_event::Event",
+    tags = "6, 7, 11, 19, 31, 43, 13, 17, 24, 26, 27, 51, 15, 18, 22, 21, 29, 28, 20, 39, 8, 44, 14, 5, 45, 2, 3, 32, 34, 37, 52, 38, 46, 48, 47, 35, 36, 1, 9, 10, 12, 16, 42, 23, 25, 30, 33"
+  )]
   pub event: Option<game_event::Event>,
 }
 /// Nested message and enum types in `GameEvent`.
@@ -124,585 +127,585 @@ pub mod game_event {
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BallLeftField {
     /// the team that last touched the ball
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that last touched the ball
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location where the ball left the field \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
   }
   /// the ball left the field via goal line and a team committed an aimless kick
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct AimlessKick {
     /// the team that last touched the ball
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that last touched the ball
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location where the ball left the field \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the location where the ball was last touched \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub kick_location: Option<super::Vector2>,
   }
   /// a team shot a goal
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct Goal {
     /// the team that scored the goal
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the team that shot the goal (different from by_team for own goals)
-    #[prost(enumeration="super::Team", optional, tag="6")]
+    #[prost(enumeration = "super::Team", optional, tag = "6")]
     pub kicking_team: Option<i32>,
     /// the bot that shot the goal
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub kicking_bot: Option<u32>,
     /// the location where the ball entered the goal \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the location where the ball was kicked (for deciding if this was a valid goal) \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub kick_location: Option<super::Vector2>,
     /// the maximum height the ball reached during the goal kick (for deciding if this was a valid goal) \[m\]
-    #[prost(float, optional, tag="5")]
+    #[prost(float, optional, tag = "5")]
     pub max_ball_height: Option<f32>,
     /// number of robots of scoring team when the ball entered the goal (for deciding if this was a valid goal)
-    #[prost(uint32, optional, tag="7")]
+    #[prost(uint32, optional, tag = "7")]
     pub num_robots_by_team: Option<u32>,
     /// The UNIX timestamp \[μs\] when the scoring team last touched the ball
-    #[prost(uint64, optional, tag="8")]
+    #[prost(uint64, optional, tag = "8")]
     pub last_touch_by_team: Option<u64>,
     /// An additional message with e.g. a reason for invalid goals
-    #[prost(string, optional, tag="9")]
+    #[prost(string, optional, tag = "9")]
     pub message: Option<String>,
   }
   /// the ball entered the goal directly during an indirect free kick
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct IndirectGoal {
     /// the team that tried to shoot the goal
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that kicked the ball - at least the team must be set
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location where the ball entered the goal \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the location where the ball was kicked \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub kick_location: Option<super::Vector2>,
   }
   /// the ball entered the goal, but was initially chipped
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct ChippedGoal {
     /// the team that tried to shoot the goal
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that kicked the ball
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location where the ball entered the goal \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the location where the ball was kicked \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub kick_location: Option<super::Vector2>,
     /// the maximum height \[m\] of the ball, before it entered the goal and since the last kick \[m\]
-    #[prost(float, optional, tag="5")]
+    #[prost(float, optional, tag = "5")]
     pub max_ball_height: Option<f32>,
   }
   /// a bot moved too fast while the game was stopped
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotTooFastInStop {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that was too fast
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the bot \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the bot speed \[m/s\]
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub speed: Option<f32>,
   }
   /// a bot of the defending team got too close to the kick point during a free kick
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct DefenderTooCloseToKickPoint {
     /// the team that was found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that violates the distance to the kick point
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the bot \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the distance \[m\] from bot to the kick point (including the minimum radius)
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub distance: Option<f32>,
   }
   /// two robots crashed into each other with similar speeds
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotCrashDrawn {
     /// the bot of the yellow team
-    #[prost(uint32, optional, tag="1")]
+    #[prost(uint32, optional, tag = "1")]
     pub bot_yellow: Option<u32>,
     /// the bot of the blue team
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub bot_blue: Option<u32>,
     /// the location of the crash (center between both bots) \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the calculated crash speed \[m/s\] of the two bots
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub crash_speed: Option<f32>,
     /// the difference \[m/s\] of the velocity of the two bots
-    #[prost(float, optional, tag="5")]
+    #[prost(float, optional, tag = "5")]
     pub speed_diff: Option<f32>,
     /// the angle \[rad\] in the range \[0, π\] of the bot velocity vectors
     /// an angle of 0 rad (  0°) means, the bots barely touched each other
     /// an angle of π rad (180°) means, the bots crashed frontal into each other
-    #[prost(float, optional, tag="6")]
+    #[prost(float, optional, tag = "6")]
     pub crash_angle: Option<f32>,
   }
   /// two robots crashed into each other and one team was found guilty to due significant speed difference
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotCrashUnique {
     /// the team that caused the crash
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that caused the crash
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub violator: Option<u32>,
     /// the bot of the opposite team that was involved in the crash
-    #[prost(uint32, optional, tag="3")]
+    #[prost(uint32, optional, tag = "3")]
     pub victim: Option<u32>,
     /// the location of the crash (center between both bots) \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub location: Option<super::Vector2>,
     /// the calculated crash speed vector \[m/s\] of the two bots
-    #[prost(float, optional, tag="5")]
+    #[prost(float, optional, tag = "5")]
     pub crash_speed: Option<f32>,
     /// the difference \[m/s\] of the velocity of the two bots
-    #[prost(float, optional, tag="6")]
+    #[prost(float, optional, tag = "6")]
     pub speed_diff: Option<f32>,
     /// the angle \[rad\] in the range \[0, π\] of the bot velocity vectors
     /// an angle of 0 rad (  0°) means, the bots barely touched each other
     /// an angle of π rad (180°) means, the bots crashed frontal into each other
-    #[prost(float, optional, tag="7")]
+    #[prost(float, optional, tag = "7")]
     pub crash_angle: Option<f32>,
   }
   /// a bot pushed another bot over a significant distance
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotPushedBot {
     /// the team that pushed the other team
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that pushed the other bot
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub violator: Option<u32>,
     /// the bot of the opposite team that was pushed
-    #[prost(uint32, optional, tag="3")]
+    #[prost(uint32, optional, tag = "3")]
     pub victim: Option<u32>,
     /// the location of the push (center between both bots) \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub location: Option<super::Vector2>,
     /// the pushed distance \[m\]
-    #[prost(float, optional, tag="5")]
+    #[prost(float, optional, tag = "5")]
     pub pushed_distance: Option<f32>,
   }
   /// a bot tipped over
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotTippedOver {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that tipped over
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the bot \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the location of the ball at the moment when this foul occurred \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub ball_location: Option<super::Vector2>,
   }
   /// a bot dropped parts
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotDroppedParts {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that dropped the parts
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location where the parts were dropped \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the location of the ball at the moment when this foul occurred \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub ball_location: Option<super::Vector2>,
   }
   /// a defender other than the keeper was fully located inside its own defense and touched the ball
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct DefenderInDefenseArea {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that is inside the penalty area
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the bot \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the distance \[m\] from bot case to the nearest point outside the defense area
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub distance: Option<f32>,
   }
   /// a defender other than the keeper was partially located inside its own defense area and touched the ball
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct DefenderInDefenseAreaPartially {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that is partially inside the penalty area
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the bot
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the distance \[m\] that the bot is inside the penalty area
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub distance: Option<f32>,
     /// the location of the ball at the moment when this foul occurred \[m\]
-    #[prost(message, optional, tag="5")]
+    #[prost(message, optional, tag = "5")]
     pub ball_location: Option<super::Vector2>,
   }
   /// an attacker touched the ball inside the opponent defense area
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct AttackerTouchedBallInDefenseArea {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that is inside the penalty area
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the bot \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the distance \[m\] that the bot is inside the penalty area
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub distance: Option<f32>,
   }
   /// a bot kicked the ball too fast
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotKickedBallTooFast {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that kicked too fast
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the ball at the time of the highest speed \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the absolute initial ball speed (kick speed) \[m/s\]
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub initial_ball_speed: Option<f32>,
     /// was the ball chipped?
-    #[prost(bool, optional, tag="5")]
+    #[prost(bool, optional, tag = "5")]
     pub chipped: Option<bool>,
   }
   /// a bot dribbled to ball too far
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotDribbledBallTooFar {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that dribbled too far
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location where the dribbling started \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub start: Option<super::Vector2>,
     /// the location where the maximum dribbling distance was reached \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub end: Option<super::Vector2>,
   }
   /// an attacker touched the opponent robot inside defense area
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct AttackerTouchedOpponentInDefenseArea {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that touched the opponent robot
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the bot of the opposite team that was touched
-    #[prost(uint32, optional, tag="4")]
+    #[prost(uint32, optional, tag = "4")]
     pub victim: Option<u32>,
     /// the location of the contact point between both bots \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
   }
   /// an attacker touched the ball multiple times when it was not allowed to
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct AttackerDoubleTouchedBall {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that touched the ball twice
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the ball when it was first touched \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
   }
   /// an attacker was located too near to the opponent defense area during stop or free kick
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct AttackerTooCloseToDefenseArea {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that is too close to the defense area
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the bot \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the distance \[m\] of the bot to the penalty area
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub distance: Option<f32>,
     /// the location of the ball at the moment when this foul occurred \[m\]
-    #[prost(message, optional, tag="5")]
+    #[prost(message, optional, tag = "5")]
     pub ball_location: Option<super::Vector2>,
   }
   /// a bot held the ball for too long
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotHeldBallDeliberately {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that holds the ball
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the ball \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
     /// the duration \[s\] that the bot hold the ball
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub duration: Option<f32>,
   }
   /// a bot interfered the ball placement of the other team
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BotInterferedPlacement {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the bot that interfered the placement
-    #[prost(uint32, optional, tag="2")]
+    #[prost(uint32, optional, tag = "2")]
     pub by_bot: Option<u32>,
     /// the location of the bot \[m\]
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub location: Option<super::Vector2>,
   }
   /// a team collected multiple yellow cards
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct MultipleCards {
     /// the team that received multiple yellow cards
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
   }
   /// a team collected multiple fouls, which results in a yellow card
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct MultipleFouls {
     /// the team that collected multiple fouls
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the list of game events that caused the multiple fouls
-    #[prost(message, repeated, tag="2")]
+    #[prost(message, repeated, tag = "2")]
     pub caused_game_events: Vec<super::GameEvent>,
   }
   /// a team failed to place the ball multiple times in a row
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct MultiplePlacementFailures {
     /// the team that failed multiple times
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
   }
   /// timeout waiting for the attacking team to perform the free kick
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct KickTimeout {
     /// the team that that should have kicked
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the location of the ball \[m\]
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub location: Option<super::Vector2>,
     /// the time \[s\] that was waited
-    #[prost(float, optional, tag="3")]
+    #[prost(float, optional, tag = "3")]
     pub time: Option<f32>,
   }
   /// game was stuck
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct NoProgressInGame {
     /// the location of the ball
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub location: Option<super::Vector2>,
     /// the time \[s\] that was waited
-    #[prost(float, optional, tag="2")]
+    #[prost(float, optional, tag = "2")]
     pub time: Option<f32>,
   }
   /// ball placement failed
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct PlacementFailed {
     /// the team that failed
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the remaining distance \[m\] from ball to placement position
-    #[prost(float, optional, tag="2")]
+    #[prost(float, optional, tag = "2")]
     pub remaining_distance: Option<f32>,
     /// the distance \[m\] of the nearest own robot to the ball
-    #[prost(float, optional, tag="3")]
+    #[prost(float, optional, tag = "3")]
     pub nearest_own_bot_distance: Option<f32>,
   }
   /// a team was found guilty for minor unsporting behavior
   #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct UnsportingBehaviorMinor {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// an explanation of the situation and decision
-    #[prost(string, required, tag="2")]
+    #[prost(string, required, tag = "2")]
     pub reason: String,
   }
   /// a team was found guilty for major unsporting behavior
   #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct UnsportingBehaviorMajor {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// an explanation of the situation and decision
-    #[prost(string, required, tag="2")]
+    #[prost(string, required, tag = "2")]
     pub reason: String,
   }
   /// a keeper held the ball in its defense area for too long
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct KeeperHeldBall {
     /// the team that found guilty
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the location of the ball \[m\]
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub location: Option<super::Vector2>,
     /// the duration \[s\] that the keeper hold the ball
-    #[prost(float, optional, tag="3")]
+    #[prost(float, optional, tag = "3")]
     pub duration: Option<f32>,
   }
   /// a team successfully placed the ball
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct PlacementSucceeded {
     /// the team that did the placement
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the time \[s\] taken for placing the ball
-    #[prost(float, optional, tag="2")]
+    #[prost(float, optional, tag = "2")]
     pub time_taken: Option<f32>,
     /// the distance \[m\] between placement location and actual ball position
-    #[prost(float, optional, tag="3")]
+    #[prost(float, optional, tag = "3")]
     pub precision: Option<f32>,
     /// the distance \[m\] between the initial ball location and the placement position
-    #[prost(float, optional, tag="4")]
+    #[prost(float, optional, tag = "4")]
     pub distance: Option<f32>,
   }
   /// both teams are prepared - all conditions are met to continue (with kickoff or penalty kick)
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct Prepared {
     /// the time \[s\] taken for preparing
-    #[prost(float, optional, tag="1")]
+    #[prost(float, optional, tag = "1")]
     pub time_taken: Option<f32>,
   }
   /// bots are being substituted by a team
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct BotSubstitution {
     /// the team that substitutes robots
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
   }
   /// A foul for excessive bot substitutions
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct ExcessiveBotSubstitution {
     /// the team that substitutes robots
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
   }
   /// A challenge flag, requested by a team previously, is flagged
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct ChallengeFlag {
     /// the team that requested the challenge flag
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
   }
   /// A challenge, flagged recently, has been handled by the referee
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct ChallengeFlagHandled {
     /// the team that requested the challenge flag
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the challenge was accepted by the referee
-    #[prost(bool, required, tag="2")]
+    #[prost(bool, required, tag = "2")]
     pub accepted: bool,
   }
   /// An emergency stop, requested by team previously, occurred
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct EmergencyStop {
     /// the team that substitutes robots
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
   }
   /// a team has too many robots on the field
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct TooManyRobots {
     /// the team that has too many robots
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// number of robots allowed at the moment
-    #[prost(int32, optional, tag="2")]
+    #[prost(int32, optional, tag = "2")]
     pub num_robots_allowed: Option<i32>,
     /// number of robots currently on the field
-    #[prost(int32, optional, tag="3")]
+    #[prost(int32, optional, tag = "3")]
     pub num_robots_on_field: Option<i32>,
     /// the location of the ball at the moment when this foul occurred \[m\]
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub ball_location: Option<super::Vector2>,
   }
   /// a robot chipped the ball over the field boundary out of the playing surface
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct BoundaryCrossing {
     /// the team that has too many robots
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the location of the ball \[m\]
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub location: Option<super::Vector2>,
   }
   /// the penalty kick failed (by time or by keeper)
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct PenaltyKickFailed {
     /// the team that last touched the ball
-    #[prost(enumeration="super::Team", required, tag="1")]
+    #[prost(enumeration = "super::Team", required, tag = "1")]
     pub by_team: i32,
     /// the location of the ball at the moment of this event \[m\]
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub location: Option<super::Vector2>,
     /// an explanation of the failure
-    #[prost(string, optional, tag="3")]
+    #[prost(string, optional, tag = "3")]
     pub reason: Option<String>,
   }
   #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
@@ -710,7 +713,6 @@ pub mod game_event {
   pub enum Type {
     UnknownGameEventType = 0,
     // Ball out of field events (stopping)
-
     /// triggered by autoRef
     BallLeftFieldTouchLine = 6,
     /// triggered by autoRef
@@ -718,7 +720,6 @@ pub mod game_event {
     /// triggered by autoRef
     AimlessKick = 11,
     // Stopping Fouls
-
     /// triggered by autoRef
     AttackerTooCloseToDefenseArea = 19,
     /// triggered by autoRef
@@ -738,7 +739,6 @@ pub mod game_event {
     /// triggered by human ref
     BotDroppedParts = 47,
     // Non-Stopping Fouls
-
     /// triggered by autoRef
     AttackerTouchedBallInDefenseArea = 15,
     /// triggered by autoRef
@@ -748,7 +748,6 @@ pub mod game_event {
     /// triggered by autoRef
     BotCrashDrawn = 21,
     // Fouls while ball out of play
-
     /// triggered by autoRef
     DefenderTooCloseToKickPoint = 29,
     /// triggered by autoRef
@@ -758,7 +757,6 @@ pub mod game_event {
     /// triggered by GC
     ExcessiveBotSubstitution = 48,
     // Scoring goals
-
     /// triggered by autoRef
     PossibleGoal = 39,
     /// triggered by GC
@@ -766,7 +764,6 @@ pub mod game_event {
     /// triggered by GC
     InvalidGoal = 42,
     // Other events
-
     /// triggered by autoRef
     AttackerDoubleTouchedBall = 14,
     /// triggered by autoRef
@@ -796,7 +793,6 @@ pub mod game_event {
     /// triggered by human ref
     UnsportingBehaviorMajor = 36,
     // Deprecated events
-
     Prepared = 1,
     IndirectGoal = 9,
     ChippedGoal = 10,
@@ -858,7 +854,9 @@ pub mod game_event {
         Self::ChippedGoal => "CHIPPED_GOAL",
         Self::KickTimeout => "KICK_TIMEOUT",
         Self::AttackerTouchedOpponentInDefenseArea => "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA",
-        Self::AttackerTouchedOpponentInDefenseAreaSkipped => "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED",
+        Self::AttackerTouchedOpponentInDefenseAreaSkipped => {
+          "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED"
+        }
         Self::BotCrashUniqueSkipped => "BOT_CRASH_UNIQUE_SKIPPED",
         Self::BotPushedBotSkipped => "BOT_PUSHED_BOT_SKIPPED",
         Self::DefenderInDefenseAreaPartially => "DEFENDER_IN_DEFENSE_AREA_PARTIALLY",
@@ -910,8 +908,12 @@ pub mod game_event {
         "INDIRECT_GOAL" => Some(Self::IndirectGoal),
         "CHIPPED_GOAL" => Some(Self::ChippedGoal),
         "KICK_TIMEOUT" => Some(Self::KickTimeout),
-        "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA" => Some(Self::AttackerTouchedOpponentInDefenseArea),
-        "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED" => Some(Self::AttackerTouchedOpponentInDefenseAreaSkipped),
+        "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA" => {
+          Some(Self::AttackerTouchedOpponentInDefenseArea)
+        }
+        "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED" => {
+          Some(Self::AttackerTouchedOpponentInDefenseAreaSkipped)
+        }
         "BOT_CRASH_UNIQUE_SKIPPED" => Some(Self::BotCrashUniqueSkipped),
         "BOT_PUSHED_BOT_SKIPPED" => Some(Self::BotPushedBotSkipped),
         "DEFENDER_IN_DEFENSE_AREA_PARTIALLY" => Some(Self::DefenderInDefenseAreaPartially),
@@ -924,122 +926,115 @@ pub mod game_event {
   #[derive(Clone, PartialEq, prost::Oneof)]
   pub enum Event {
     // Ball out of field events (stopping)
-
-    #[prost(message, tag="6")]
+    #[prost(message, tag = "6")]
     BallLeftFieldTouchLine(BallLeftField),
-    #[prost(message, tag="7")]
+    #[prost(message, tag = "7")]
     BallLeftFieldGoalLine(BallLeftField),
-    #[prost(message, tag="11")]
+    #[prost(message, tag = "11")]
     AimlessKick(AimlessKick),
     // Stopping Fouls
-
-    #[prost(message, tag="19")]
+    #[prost(message, tag = "19")]
     AttackerTooCloseToDefenseArea(AttackerTooCloseToDefenseArea),
-    #[prost(message, tag="31")]
+    #[prost(message, tag = "31")]
     DefenderInDefenseArea(DefenderInDefenseArea),
-    #[prost(message, tag="43")]
+    #[prost(message, tag = "43")]
     BoundaryCrossing(BoundaryCrossing),
-    #[prost(message, tag="13")]
+    #[prost(message, tag = "13")]
     KeeperHeldBall(KeeperHeldBall),
-    #[prost(message, tag="17")]
+    #[prost(message, tag = "17")]
     BotDribbledBallTooFar(BotDribbledBallTooFar),
-    #[prost(message, tag="24")]
+    #[prost(message, tag = "24")]
     BotPushedBot(BotPushedBot),
-    #[prost(message, tag="26")]
+    #[prost(message, tag = "26")]
     BotHeldBallDeliberately(BotHeldBallDeliberately),
-    #[prost(message, tag="27")]
+    #[prost(message, tag = "27")]
     BotTippedOver(BotTippedOver),
-    #[prost(message, tag="51")]
+    #[prost(message, tag = "51")]
     BotDroppedParts(BotDroppedParts),
     // Non-Stopping Fouls
-
-    #[prost(message, tag="15")]
+    #[prost(message, tag = "15")]
     AttackerTouchedBallInDefenseArea(AttackerTouchedBallInDefenseArea),
-    #[prost(message, tag="18")]
+    #[prost(message, tag = "18")]
     BotKickedBallTooFast(BotKickedBallTooFast),
-    #[prost(message, tag="22")]
+    #[prost(message, tag = "22")]
     BotCrashUnique(BotCrashUnique),
-    #[prost(message, tag="21")]
+    #[prost(message, tag = "21")]
     BotCrashDrawn(BotCrashDrawn),
     // Fouls while ball out of play
-
-    #[prost(message, tag="29")]
+    #[prost(message, tag = "29")]
     DefenderTooCloseToKickPoint(DefenderTooCloseToKickPoint),
-    #[prost(message, tag="28")]
+    #[prost(message, tag = "28")]
     BotTooFastInStop(BotTooFastInStop),
-    #[prost(message, tag="20")]
+    #[prost(message, tag = "20")]
     BotInterferedPlacement(BotInterferedPlacement),
     // Scoring goals
-
-    #[prost(message, tag="39")]
+    #[prost(message, tag = "39")]
     PossibleGoal(Goal),
-    #[prost(message, tag="8")]
+    #[prost(message, tag = "8")]
     Goal(Goal),
-    #[prost(message, tag="44")]
+    #[prost(message, tag = "44")]
     InvalidGoal(Goal),
     // Other events
-
-    #[prost(message, tag="14")]
+    #[prost(message, tag = "14")]
     AttackerDoubleTouchedBall(AttackerDoubleTouchedBall),
-    #[prost(message, tag="5")]
+    #[prost(message, tag = "5")]
     PlacementSucceeded(PlacementSucceeded),
-    #[prost(message, tag="45")]
+    #[prost(message, tag = "45")]
     PenaltyKickFailed(PenaltyKickFailed),
-    #[prost(message, tag="2")]
+    #[prost(message, tag = "2")]
     NoProgressInGame(NoProgressInGame),
-    #[prost(message, tag="3")]
+    #[prost(message, tag = "3")]
     PlacementFailed(PlacementFailed),
-    #[prost(message, tag="32")]
+    #[prost(message, tag = "32")]
     MultipleCards(MultipleCards),
-    #[prost(message, tag="34")]
+    #[prost(message, tag = "34")]
     MultipleFouls(MultipleFouls),
-    #[prost(message, tag="37")]
+    #[prost(message, tag = "37")]
     BotSubstitution(BotSubstitution),
-    #[prost(message, tag="52")]
+    #[prost(message, tag = "52")]
     ExcessiveBotSubstitution(ExcessiveBotSubstitution),
-    #[prost(message, tag="38")]
+    #[prost(message, tag = "38")]
     TooManyRobots(TooManyRobots),
-    #[prost(message, tag="46")]
+    #[prost(message, tag = "46")]
     ChallengeFlag(ChallengeFlag),
-    #[prost(message, tag="48")]
+    #[prost(message, tag = "48")]
     ChallengeFlagHandled(ChallengeFlagHandled),
-    #[prost(message, tag="47")]
+    #[prost(message, tag = "47")]
     EmergencyStop(EmergencyStop),
-    #[prost(message, tag="35")]
+    #[prost(message, tag = "35")]
     UnsportingBehaviorMinor(UnsportingBehaviorMinor),
-    #[prost(message, tag="36")]
+    #[prost(message, tag = "36")]
     UnsportingBehaviorMajor(UnsportingBehaviorMajor),
     // Deprecated events
-
     /// replaced by ready_to_continue flag
-    #[prost(message, tag="1")]
+    #[prost(message, tag = "1")]
     Prepared(Prepared),
     /// obsolete
-    #[prost(message, tag="9")]
+    #[prost(message, tag = "9")]
     IndirectGoal(IndirectGoal),
     /// replaced by the meta-information in the possible_goal event
-    #[prost(message, tag="10")]
+    #[prost(message, tag = "10")]
     ChippedGoal(ChippedGoal),
     /// obsolete
-    #[prost(message, tag="12")]
+    #[prost(message, tag = "12")]
     KickTimeout(KickTimeout),
     /// rule removed
-    #[prost(message, tag="16")]
+    #[prost(message, tag = "16")]
     AttackerTouchedOpponentInDefenseArea(AttackerTouchedOpponentInDefenseArea),
     /// obsolete
-    #[prost(message, tag="42")]
+    #[prost(message, tag = "42")]
     AttackerTouchedOpponentInDefenseAreaSkipped(AttackerTouchedOpponentInDefenseArea),
     /// obsolete
-    #[prost(message, tag="23")]
+    #[prost(message, tag = "23")]
     BotCrashUniqueSkipped(BotCrashUnique),
     /// can not be used as long as autoRefs do not judge pushing
-    #[prost(message, tag="25")]
+    #[prost(message, tag = "25")]
     BotPushedBotSkipped(BotPushedBot),
     /// rule removed
-    #[prost(message, tag="30")]
+    #[prost(message, tag = "30")]
     DefenderInDefenseAreaPartially(DefenderInDefenseAreaPartially),
     /// the referee msg already indicates this
-    #[prost(message, tag="33")]
+    #[prost(message, tag = "33")]
     MultiplePlacementFailures(MultiplePlacementFailures),
   }
 }
@@ -1048,16 +1043,21 @@ pub mod game_event {
 pub struct Referee {
   /// A random UUID of the source that is kept constant at the source while running
   /// If multiple sources are broadcasting to the same network, this id can be used to identify individual sources
-  #[prost(string, optional, tag="18")]
+  #[prost(string, optional, tag = "18")]
   pub source_identifier: Option<String>,
   /// The match type is a meta information about the current match that helps to process the logs after a competition
-  #[prost(enumeration="MatchType", optional, tag="19", default="UnknownMatch")]
+  #[prost(
+    enumeration = "MatchType",
+    optional,
+    tag = "19",
+    default = "UnknownMatch"
+  )]
   pub match_type: Option<i32>,
   /// The UNIX timestamp when the packet was sent, in microseconds.
   /// Divide by 1,000,000 to get a time_t.
-  #[prost(uint64, required, tag="1")]
+  #[prost(uint64, required, tag = "1")]
   pub packet_timestamp: u64,
-  #[prost(enumeration="referee::Stage", required, tag="2")]
+  #[prost(enumeration = "referee::Stage", required, tag = "2")]
   pub stage: i32,
   /// The number of microseconds left in the stage.
   /// The following stages have this value; the rest do not:
@@ -1072,35 +1072,35 @@ pub struct Referee {
   ///
   /// If the stage runs over its specified time, this value
   /// becomes negative.
-  #[prost(sint64, optional, tag="3")]
+  #[prost(sint64, optional, tag = "3")]
   pub stage_time_left: Option<i64>,
-  #[prost(enumeration="referee::Command", required, tag="4")]
+  #[prost(enumeration = "referee::Command", required, tag = "4")]
   pub command: i32,
   /// The number of commands issued since startup (mod 2^32).
-  #[prost(uint32, required, tag="5")]
+  #[prost(uint32, required, tag = "5")]
   pub command_counter: u32,
   /// The UNIX timestamp when the command was issued, in microseconds.
   /// This value changes only when a new command is issued, not on each packet.
-  #[prost(uint64, required, tag="6")]
+  #[prost(uint64, required, tag = "6")]
   pub command_timestamp: u64,
   /// Information about the two teams.
-  #[prost(message, required, tag="7")]
+  #[prost(message, required, tag = "7")]
   pub yellow: referee::TeamInfo,
-  #[prost(message, required, tag="8")]
+  #[prost(message, required, tag = "8")]
   pub blue: referee::TeamInfo,
-  #[prost(message, optional, tag="9")]
+  #[prost(message, optional, tag = "9")]
   pub designated_position: Option<referee::Point>,
   /// Information about the direction of play.
   /// True, if the blue team will have it's goal on the positive x-axis of the ssl-vision coordinate system.
   /// Obviously, the yellow team will play on the opposite half.
-  #[prost(bool, optional, tag="10")]
+  #[prost(bool, optional, tag = "10")]
   pub blue_team_on_positive_half: Option<bool>,
   /// The command that will be issued after the current stoppage and ball placement to continue the game.
-  #[prost(enumeration="referee::Command", optional, tag="12")]
+  #[prost(enumeration = "referee::Command", optional, tag = "12")]
   pub next_command: Option<i32>,
-  #[prost(message, repeated, tag="16")]
+  #[prost(message, repeated, tag = "16")]
   pub game_events: Vec<GameEvent>,
-  #[prost(message, repeated, tag="17")]
+  #[prost(message, repeated, tag = "17")]
   pub game_event_proposals: Vec<GameEventProposalGroup>,
   /// The time in microseconds that is remaining until the current action times out
   /// The time will not be reset. It can get negative.
@@ -1109,10 +1109,10 @@ pub struct Referee {
   ///   * free kicks
   ///   * kickoff, penalty kick, force start
   ///   * ball placement
-  #[prost(int64, optional, tag="15")]
+  #[prost(int64, optional, tag = "15")]
   pub current_action_time_remaining: Option<i64>,
   /// A message that can be displayed to the spectators, like a reason for a stoppage.
-  #[prost(string, optional, tag="20")]
+  #[prost(string, optional, tag = "20")]
   pub status_message: Option<String>,
 }
 /// Nested message and enum types in `Referee`.
@@ -1121,61 +1121,61 @@ pub mod referee {
   #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct TeamInfo {
     /// The team's name (empty string if operator has not typed anything).
-    #[prost(string, required, tag="1")]
+    #[prost(string, required, tag = "1")]
     pub name: String,
     /// The number of goals scored by the team during normal play and overtime.
-    #[prost(uint32, required, tag="2")]
+    #[prost(uint32, required, tag = "2")]
     pub score: u32,
     /// The number of red cards issued to the team since the beginning of the game.
-    #[prost(uint32, required, tag="3")]
+    #[prost(uint32, required, tag = "3")]
     pub red_cards: u32,
     /// The amount of time (in microseconds) left on each yellow card issued to the team.
     /// If no yellow cards are issued, this array has no elements.
     /// Otherwise, times are ordered from smallest to largest.
-    #[prost(uint32, repeated, tag="4")]
+    #[prost(uint32, repeated, tag = "4")]
     pub yellow_card_times: Vec<u32>,
     /// The total number of yellow cards ever issued to the team.
-    #[prost(uint32, required, tag="5")]
+    #[prost(uint32, required, tag = "5")]
     pub yellow_cards: u32,
     /// The number of timeouts this team can still call.
     /// If in a timeout right now, that timeout is excluded.
-    #[prost(uint32, required, tag="6")]
+    #[prost(uint32, required, tag = "6")]
     pub timeouts: u32,
     /// The number of microseconds of timeout this team can use.
-    #[prost(uint32, required, tag="7")]
+    #[prost(uint32, required, tag = "7")]
     pub timeout_time: u32,
     /// The pattern number of this team's goalkeeper.
-    #[prost(uint32, required, tag="8")]
+    #[prost(uint32, required, tag = "8")]
     pub goalkeeper: u32,
     /// The total number of countable fouls that act towards yellow cards
-    #[prost(uint32, optional, tag="9")]
+    #[prost(uint32, optional, tag = "9")]
     pub foul_counter: Option<u32>,
     /// The number of consecutive ball placement failures of this team
-    #[prost(uint32, optional, tag="10")]
+    #[prost(uint32, optional, tag = "10")]
     pub ball_placement_failures: Option<u32>,
     /// Indicate if the team is able and allowed to place the ball
-    #[prost(bool, optional, tag="12")]
+    #[prost(bool, optional, tag = "12")]
     pub can_place_ball: Option<bool>,
     /// The maximum number of bots allowed on the field based on division and cards
-    #[prost(uint32, optional, tag="13")]
+    #[prost(uint32, optional, tag = "13")]
     pub max_allowed_bots: Option<u32>,
     /// The team has submitted an intent to substitute one or more robots at the next chance
-    #[prost(bool, optional, tag="14")]
+    #[prost(bool, optional, tag = "14")]
     pub bot_substitution_intent: Option<bool>,
     /// Indicate if the team reached the maximum allowed ball placement failures and is thus not allowed to place the ball anymore
-    #[prost(bool, optional, tag="15")]
+    #[prost(bool, optional, tag = "15")]
     pub ball_placement_failures_reached: Option<bool>,
     /// The team is allowed to substitute one or more robots currently
-    #[prost(bool, optional, tag="16")]
+    #[prost(bool, optional, tag = "16")]
     pub bot_substitution_allowed: Option<bool>,
     /// The number of bot substitutions left by the team in this halftime
-    #[prost(uint32, optional, tag="17")]
+    #[prost(uint32, optional, tag = "17")]
     pub bot_substitutions_left: Option<u32>,
     /// The number of microseconds left for current bot substitution
-    #[prost(uint32, optional, tag="18")]
+    #[prost(uint32, optional, tag = "18")]
     pub bot_substitution_time_left: Option<u32>,
     /// The color of the hull of the robots of this team
-    #[prost(enumeration="super::HullColor", optional, tag="19")]
+    #[prost(enumeration = "super::HullColor", optional, tag = "19")]
     pub hull_color: Option<i32>,
   }
   /// The coordinates of the Designated Position. These are measured in
@@ -1184,9 +1184,9 @@ pub mod referee {
   /// both absent (in the case of any other command).
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct Point {
-    #[prost(float, required, tag="1")]
+    #[prost(float, required, tag = "1")]
     pub x: f32,
-    #[prost(float, required, tag="2")]
+    #[prost(float, required, tag = "2")]
     pub y: f32,
   }
   /// These are the "coarse" stages of the game.
@@ -1376,13 +1376,13 @@ pub mod referee {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GameEventProposalGroup {
   /// Unique ID of this group
-  #[prost(string, optional, tag="3")]
+  #[prost(string, optional, tag = "3")]
   pub id: Option<String>,
   /// The proposed game events
-  #[prost(message, repeated, tag="1")]
+  #[prost(message, repeated, tag = "1")]
   pub game_events: Vec<GameEvent>,
   /// Whether the proposal group was accepted
-  #[prost(bool, optional, tag="2")]
+  #[prost(bool, optional, tag = "2")]
   pub accepted: Option<bool>,
 }
 /// MatchType is a meta information about the current match for easier log processing
@@ -1457,34 +1457,34 @@ impl HullColor {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct YellowCard {
-  #[prost(uint32, optional, tag="1")]
+  #[prost(uint32, optional, tag = "1")]
   pub id: Option<u32>,
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub caused_by_game_event: Option<GameEvent>,
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub time_remaining: Option<prost_types::Duration>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RedCard {
-  #[prost(uint32, optional, tag="1")]
+  #[prost(uint32, optional, tag = "1")]
   pub id: Option<u32>,
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub caused_by_game_event: Option<GameEvent>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Foul {
-  #[prost(uint32, optional, tag="1")]
+  #[prost(uint32, optional, tag = "1")]
   pub id: Option<u32>,
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub caused_by_game_event: Option<GameEvent>,
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub timestamp: Option<prost_types::Timestamp>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Command {
-  #[prost(enumeration="command::Type", required, tag="1")]
+  #[prost(enumeration = "command::Type", required, tag = "1")]
   pub r#type: i32,
-  #[prost(enumeration="Team", required, tag="2")]
+  #[prost(enumeration = "Team", required, tag = "2")]
   pub for_team: i32,
 }
 /// Nested message and enum types in `Command`.
@@ -1542,9 +1542,9 @@ pub mod command {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GameState {
-  #[prost(enumeration="game_state::Type", required, tag="1")]
+  #[prost(enumeration = "game_state::Type", required, tag = "1")]
   pub r#type: i32,
-  #[prost(enumeration="Team", optional, tag="2")]
+  #[prost(enumeration = "Team", optional, tag = "2")]
   pub for_team: Option<i32>,
 }
 /// Nested message and enum types in `GameState`.
@@ -1600,147 +1600,150 @@ pub mod game_state {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Proposal {
   /// The timestamp when the game event proposal occurred
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub timestamp: Option<prost_types::Timestamp>,
   /// The proposed game event.
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub game_event: Option<GameEvent>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProposalGroup {
   /// Unique ID of this group
-  #[prost(string, optional, tag="4")]
+  #[prost(string, optional, tag = "4")]
   pub id: Option<String>,
   /// The proposals in this group
-  #[prost(message, repeated, tag="1")]
+  #[prost(message, repeated, tag = "1")]
   pub proposals: Vec<Proposal>,
   /// Whether the proposal group was accepted
-  #[prost(bool, optional, tag="2")]
+  #[prost(bool, optional, tag = "2")]
   pub accepted: Option<bool>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TeamInfo {
-  #[prost(string, optional, tag="1")]
+  #[prost(string, optional, tag = "1")]
   pub name: Option<String>,
-  #[prost(int32, optional, tag="2")]
+  #[prost(int32, optional, tag = "2")]
   pub goals: Option<i32>,
-  #[prost(int32, optional, tag="3")]
+  #[prost(int32, optional, tag = "3")]
   pub goalkeeper: Option<i32>,
-  #[prost(message, repeated, tag="4")]
+  #[prost(message, repeated, tag = "4")]
   pub yellow_cards: Vec<YellowCard>,
-  #[prost(message, repeated, tag="5")]
+  #[prost(message, repeated, tag = "5")]
   pub red_cards: Vec<RedCard>,
-  #[prost(int32, optional, tag="6")]
+  #[prost(int32, optional, tag = "6")]
   pub timeouts_left: Option<i32>,
-  #[prost(message, optional, tag="7")]
+  #[prost(message, optional, tag = "7")]
   pub timeout_time_left: Option<prost_types::Duration>,
-  #[prost(bool, optional, tag="8")]
+  #[prost(bool, optional, tag = "8")]
   pub on_positive_half: Option<bool>,
-  #[prost(message, repeated, tag="9")]
+  #[prost(message, repeated, tag = "9")]
   pub fouls: Vec<Foul>,
-  #[prost(int32, optional, tag="10")]
+  #[prost(int32, optional, tag = "10")]
   pub ball_placement_failures: Option<i32>,
-  #[prost(bool, optional, tag="11")]
+  #[prost(bool, optional, tag = "11")]
   pub ball_placement_failures_reached: Option<bool>,
-  #[prost(bool, optional, tag="12")]
+  #[prost(bool, optional, tag = "12")]
   pub can_place_ball: Option<bool>,
-  #[prost(int32, optional, tag="13")]
+  #[prost(int32, optional, tag = "13")]
   pub max_allowed_bots: Option<i32>,
-  #[prost(message, optional, tag="14")]
+  #[prost(message, optional, tag = "14")]
   pub requests_bot_substitution_since: Option<prost_types::Timestamp>,
-  #[prost(message, optional, tag="15")]
+  #[prost(message, optional, tag = "15")]
   pub requests_timeout_since: Option<prost_types::Timestamp>,
-  #[prost(message, optional, tag="16")]
+  #[prost(message, optional, tag = "16")]
   pub requests_emergency_stop_since: Option<prost_types::Timestamp>,
-  #[prost(int32, optional, tag="17")]
+  #[prost(int32, optional, tag = "17")]
   pub challenge_flags: Option<i32>,
-  #[prost(bool, optional, tag="18")]
+  #[prost(bool, optional, tag = "18")]
   pub bot_substitution_allowed: Option<bool>,
-  #[prost(int32, optional, tag="19")]
+  #[prost(int32, optional, tag = "19")]
   pub bot_substitutions_left: Option<i32>,
-  #[prost(message, optional, tag="20")]
+  #[prost(message, optional, tag = "20")]
   pub bot_substitution_time_left: Option<prost_types::Duration>,
-  #[prost(enumeration="HullColor", optional, tag="21")]
+  #[prost(enumeration = "HullColor", optional, tag = "21")]
   pub hull_color: Option<i32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct State {
-  #[prost(enumeration="referee::Stage", optional, tag="1")]
+  #[prost(enumeration = "referee::Stage", optional, tag = "1")]
   pub stage: Option<i32>,
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub command: Option<Command>,
-  #[prost(message, optional, tag="19")]
+  #[prost(message, optional, tag = "19")]
   pub game_state: Option<GameState>,
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub stage_time_elapsed: Option<prost_types::Duration>,
-  #[prost(message, optional, tag="5")]
+  #[prost(message, optional, tag = "5")]
   pub stage_time_left: Option<prost_types::Duration>,
-  #[prost(message, optional, tag="6")]
+  #[prost(message, optional, tag = "6")]
   pub match_time_start: Option<prost_types::Timestamp>,
-  #[prost(map="string, message", tag="8")]
+  #[prost(map = "string, message", tag = "8")]
   pub team_state: std::collections::HashMap<String, TeamInfo>,
-  #[prost(message, optional, tag="9")]
+  #[prost(message, optional, tag = "9")]
   pub placement_pos: Option<Vector2>,
-  #[prost(message, optional, tag="10")]
+  #[prost(message, optional, tag = "10")]
   pub next_command: Option<Command>,
-  #[prost(message, optional, tag="12")]
+  #[prost(message, optional, tag = "12")]
   pub current_action_time_remaining: Option<prost_types::Duration>,
-  #[prost(message, repeated, tag="13")]
+  #[prost(message, repeated, tag = "13")]
   pub game_events: Vec<GameEvent>,
-  #[prost(message, repeated, tag="14")]
+  #[prost(message, repeated, tag = "14")]
   pub proposal_groups: Vec<ProposalGroup>,
-  #[prost(enumeration="Division", optional, tag="15")]
+  #[prost(enumeration = "Division", optional, tag = "15")]
   pub division: Option<i32>,
-  #[prost(enumeration="Team", optional, tag="17")]
+  #[prost(enumeration = "Team", optional, tag = "17")]
   pub first_kickoff_team: Option<i32>,
-  #[prost(enumeration="MatchType", optional, tag="18")]
+  #[prost(enumeration = "MatchType", optional, tag = "18")]
   pub match_type: Option<i32>,
-  #[prost(message, optional, tag="20")]
+  #[prost(message, optional, tag = "20")]
   pub ready_continue_time: Option<prost_types::Timestamp>,
-  #[prost(message, optional, tag="21")]
+  #[prost(message, optional, tag = "21")]
   pub shootout_state: Option<ShootoutState>,
-  #[prost(string, optional, tag="22")]
+  #[prost(string, optional, tag = "22")]
   pub status_message: Option<String>,
   /// The maximum number of bots per team (overwrites the division config)
-  #[prost(int32, optional, tag="23")]
+  #[prost(int32, optional, tag = "23")]
   pub max_bots_per_team: Option<i32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ShootoutState {
-  #[prost(enumeration="Team", optional, tag="1")]
+  #[prost(enumeration = "Team", optional, tag = "1")]
   pub next_team: Option<i32>,
-  #[prost(map="string, int32", tag="2")]
+  #[prost(map = "string, int32", tag = "2")]
   pub number_of_attempts: std::collections::HashMap<String, i32>,
 }
 /// A state change
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StateChange {
   /// A unique increasing id
-  #[prost(int32, optional, tag="1")]
+  #[prost(int32, optional, tag = "1")]
   pub id: Option<i32>,
   /// The previous state
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub state_pre: Option<State>,
   /// The state after the change was applied
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub state: Option<State>,
   /// The change itself
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub change: Option<Change>,
   /// The timestamp when the change was triggered
-  #[prost(message, optional, tag="5")]
+  #[prost(message, optional, tag = "5")]
   pub timestamp: Option<prost_types::Timestamp>,
 }
 /// A certain change
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Change {
   /// An identifier of the origin that triggered the change
-  #[prost(string, optional, tag="1")]
+  #[prost(string, optional, tag = "1")]
   pub origin: Option<String>,
   /// Is this change revertible?
-  #[prost(bool, optional, tag="16")]
+  #[prost(bool, optional, tag = "16")]
   pub revertible: Option<bool>,
-  #[prost(oneof="change::Change", tags="2, 3, 4, 5, 6, 7, 8, 19, 9, 12, 13, 14, 15, 17, 18, 20")]
+  #[prost(
+    oneof = "change::Change",
+    tags = "2, 3, 4, 5, 6, 7, 8, 19, 9, 12, 13, 14, 15, 17, 18, 20"
+  )]
   pub change: Option<change::Change>,
 }
 /// Nested message and enum types in `Change`.
@@ -1749,224 +1752,223 @@ pub mod change {
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct NewCommand {
     /// The command
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub command: Option<super::Command>,
   }
   /// Switch to a new stage
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct ChangeStage {
     /// The new stage
-    #[prost(enumeration="super::referee::Stage", optional, tag="1")]
+    #[prost(enumeration = "super::referee::Stage", optional, tag = "1")]
     pub new_stage: Option<i32>,
   }
   /// Set the ball placement pos
   #[derive(Clone, Copy, PartialEq, ::prost::Message)]
   pub struct SetBallPlacementPos {
     /// The position in \[m\]
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub pos: Option<super::Vector2>,
   }
   /// Add a new yellow card
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct AddYellowCard {
     /// The team that the card is for
-    #[prost(enumeration="super::Team", optional, tag="1")]
+    #[prost(enumeration = "super::Team", optional, tag = "1")]
     pub for_team: Option<i32>,
     /// The game event that caused the card
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub caused_by_game_event: Option<super::GameEvent>,
   }
   /// Add a new red card
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct AddRedCard {
     /// The team that the card is for
-    #[prost(enumeration="super::Team", optional, tag="1")]
+    #[prost(enumeration = "super::Team", optional, tag = "1")]
     pub for_team: Option<i32>,
     /// The game event that caused the card
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub caused_by_game_event: Option<super::GameEvent>,
   }
   /// Trigger when a yellow card timed out
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct YellowCardOver {
     /// The team that the card was for
-    #[prost(enumeration="super::Team", optional, tag="1")]
+    #[prost(enumeration = "super::Team", optional, tag = "1")]
     pub for_team: Option<i32>,
   }
   /// Add a new game event
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct AddGameEvent {
     /// The game event
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub game_event: Option<super::GameEvent>,
   }
   /// Add a new passive game event (that is only logged, but does not automatically trigger anything)
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct AddPassiveGameEvent {
     /// The game event
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub game_event: Option<super::GameEvent>,
   }
   /// Add a new proposal (i.e. from an auto referee for majority voting)
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct AddProposal {
     /// The proposal
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub proposal: Option<super::Proposal>,
   }
   /// Accept a proposal group (that contain one or more proposals of the same type)
   #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct AcceptProposalGroup {
     /// The id of the group
-    #[prost(string, optional, tag="3")]
+    #[prost(string, optional, tag = "3")]
     pub group_id: Option<String>,
     /// An identifier of the acceptor
-    #[prost(string, optional, tag="2")]
+    #[prost(string, optional, tag = "2")]
     pub accepted_by: Option<String>,
   }
   /// Update some configuration
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct UpdateConfig {
     /// The division to play with
-    #[prost(enumeration="super::Division", optional, tag="1")]
+    #[prost(enumeration = "super::Division", optional, tag = "1")]
     pub division: Option<i32>,
     /// the team that does/did the first kick off
-    #[prost(enumeration="super::Team", optional, tag="2")]
+    #[prost(enumeration = "super::Team", optional, tag = "2")]
     pub first_kickoff_team: Option<i32>,
     /// The match type
-    #[prost(enumeration="super::MatchType", optional, tag="4")]
+    #[prost(enumeration = "super::MatchType", optional, tag = "4")]
     pub match_type: Option<i32>,
     /// The number of robots per team
-    #[prost(message, optional, tag="5")]
+    #[prost(message, optional, tag = "5")]
     pub max_robots_per_team: Option<i32>,
   }
   /// Update the current state of a team (all fields that should be updated are set)
   #[derive(Clone, PartialEq, ::prost::Message)]
   pub struct UpdateTeamState {
     /// The team
-    #[prost(enumeration="super::Team", optional, tag="1")]
+    #[prost(enumeration = "super::Team", optional, tag = "1")]
     pub for_team: Option<i32>,
     /// Change the name of the team
-    #[prost(message, optional, tag="2")]
+    #[prost(message, optional, tag = "2")]
     pub team_name: Option<String>,
     /// Change the number of goals that the teams has at the moment
-    #[prost(message, optional, tag="3")]
+    #[prost(message, optional, tag = "3")]
     pub goals: Option<i32>,
     /// The id of the goal keeper
-    #[prost(message, optional, tag="4")]
+    #[prost(message, optional, tag = "4")]
     pub goalkeeper: Option<i32>,
     /// The number of timeouts that the team has left
-    #[prost(message, optional, tag="5")]
+    #[prost(message, optional, tag = "5")]
     pub timeouts_left: Option<i32>,
     /// The timeout time that the team has left
-    #[prost(message, optional, tag="6")]
+    #[prost(message, optional, tag = "6")]
     pub timeout_time_left: Option<String>,
     /// Does the team play on the positive or the negative half (in ssl-vision coordinates)?
-    #[prost(message, optional, tag="7")]
+    #[prost(message, optional, tag = "7")]
     pub on_positive_half: Option<bool>,
     /// The number of ball placement failures
-    #[prost(message, optional, tag="8")]
+    #[prost(message, optional, tag = "8")]
     pub ball_placement_failures: Option<i32>,
     /// Can the team place the ball, or is ball placement for this team disabled and should be skipped?
-    #[prost(message, optional, tag="9")]
+    #[prost(message, optional, tag = "9")]
     pub can_place_ball: Option<bool>,
     /// The number of challenge flags that the team has left
-    #[prost(message, optional, tag="21")]
+    #[prost(message, optional, tag = "21")]
     pub challenge_flags_left: Option<i32>,
     /// The number of bot substitutions left by the team in this halftime
-    #[prost(message, optional, tag="22")]
+    #[prost(message, optional, tag = "22")]
     pub bot_substitutions_left: Option<i32>,
     /// Does the team want to substitute a robot in the next possible situation?
-    #[prost(message, optional, tag="10")]
+    #[prost(message, optional, tag = "10")]
     pub requests_bot_substitution: Option<bool>,
     /// Does the team want to take a timeout in the next possible situation?
-    #[prost(message, optional, tag="17")]
+    #[prost(message, optional, tag = "17")]
     pub requests_timeout: Option<bool>,
     /// Does the team want to challenge a recent decision of the referee?
-    #[prost(message, optional, tag="18")]
+    #[prost(message, optional, tag = "18")]
     pub requests_challenge: Option<bool>,
     /// Does the team want to request an emergency stop?
-    #[prost(message, optional, tag="19")]
+    #[prost(message, optional, tag = "19")]
     pub requests_emergency_stop: Option<bool>,
     /// Update a certain yellow card of the team
-    #[prost(message, optional, tag="20")]
+    #[prost(message, optional, tag = "20")]
     pub yellow_card: Option<super::YellowCard>,
     /// Update a certain red card of the team
-    #[prost(message, optional, tag="12")]
+    #[prost(message, optional, tag = "12")]
     pub red_card: Option<super::RedCard>,
     /// Update a certain foul of the team
-    #[prost(message, optional, tag="13")]
+    #[prost(message, optional, tag = "13")]
     pub foul: Option<super::Foul>,
     /// Remove the yellow card with this id
-    #[prost(message, optional, tag="14")]
+    #[prost(message, optional, tag = "14")]
     pub remove_yellow_card: Option<u32>,
     /// Remove the red card with this id
-    #[prost(message, optional, tag="15")]
+    #[prost(message, optional, tag = "15")]
     pub remove_red_card: Option<u32>,
     /// Remove the foul with this id
-    #[prost(message, optional, tag="16")]
+    #[prost(message, optional, tag = "16")]
     pub remove_foul: Option<u32>,
     /// The color of the hull
-    #[prost(enumeration="super::HullColor", optional, tag="23")]
+    #[prost(enumeration = "super::HullColor", optional, tag = "23")]
     pub hull_color: Option<i32>,
   }
   /// Switch the team colors
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-  pub struct SwitchColors {
-  }
+  pub struct SwitchColors {}
   /// Revert a certain change
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct Revert {
     /// The id of the change
-    #[prost(int32, optional, tag="1")]
+    #[prost(int32, optional, tag = "1")]
     pub change_id: Option<i32>,
   }
   /// Change the current game state
   #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct NewGameState {
     /// The new game state
-    #[prost(message, optional, tag="1")]
+    #[prost(message, optional, tag = "1")]
     pub game_state: Option<super::GameState>,
   }
   #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
   pub struct SetStatusMessage {
     /// The new status message
-    #[prost(string, optional, tag="1")]
+    #[prost(string, optional, tag = "1")]
     pub status_message: Option<String>,
   }
   #[derive(Clone, PartialEq, prost::Oneof)]
   pub enum Change {
-    #[prost(message, tag="2")]
+    #[prost(message, tag = "2")]
     NewCommandChange(NewCommand),
-    #[prost(message, tag="3")]
+    #[prost(message, tag = "3")]
     ChangeStageChange(ChangeStage),
-    #[prost(message, tag="4")]
+    #[prost(message, tag = "4")]
     SetBallPlacementPosChange(SetBallPlacementPos),
-    #[prost(message, tag="5")]
+    #[prost(message, tag = "5")]
     AddYellowCardChange(AddYellowCard),
-    #[prost(message, tag="6")]
+    #[prost(message, tag = "6")]
     AddRedCardChange(AddRedCard),
-    #[prost(message, tag="7")]
+    #[prost(message, tag = "7")]
     YellowCardOverChange(YellowCardOver),
-    #[prost(message, tag="8")]
+    #[prost(message, tag = "8")]
     AddGameEventChange(AddGameEvent),
-    #[prost(message, tag="19")]
+    #[prost(message, tag = "19")]
     AddPassiveGameEventChange(AddPassiveGameEvent),
-    #[prost(message, tag="9")]
+    #[prost(message, tag = "9")]
     AddProposalChange(AddProposal),
-    #[prost(message, tag="12")]
+    #[prost(message, tag = "12")]
     UpdateConfigChange(UpdateConfig),
-    #[prost(message, tag="13")]
+    #[prost(message, tag = "13")]
     UpdateTeamStateChange(UpdateTeamState),
-    #[prost(message, tag="14")]
+    #[prost(message, tag = "14")]
     SwitchColorsChange(SwitchColors),
-    #[prost(message, tag="15")]
+    #[prost(message, tag = "15")]
     RevertChange(Revert),
-    #[prost(message, tag="17")]
+    #[prost(message, tag = "17")]
     NewGameStateChange(NewGameState),
-    #[prost(message, tag="18")]
+    #[prost(message, tag = "18")]
     AcceptProposalGroupChange(AcceptProposalGroup),
-    #[prost(message, tag="20")]
+    #[prost(message, tag = "20")]
     SetStatusMessageChange(SetStatusMessage),
   }
 }
@@ -1974,45 +1976,49 @@ pub mod change {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GcState {
   /// the state of each team
-  #[prost(map="string, message", tag="1")]
+  #[prost(map = "string, message", tag = "1")]
   pub team_state: std::collections::HashMap<String, GcStateTeam>,
   /// the states of the auto referees
-  #[prost(map="string, message", tag="2")]
+  #[prost(map = "string, message", tag = "2")]
   pub auto_ref_state: std::collections::HashMap<String, GcStateAutoRef>,
   /// the attached trackers (uuid -> source_name)
-  #[prost(map="string, string", tag="3")]
+  #[prost(map = "string, string", tag = "3")]
   pub trackers: std::collections::HashMap<String, String>,
   /// the next actions that can be executed when continuing
-  #[prost(message, repeated, tag="4")]
+  #[prost(message, repeated, tag = "4")]
   pub continue_actions: Vec<ContinueAction>,
   /// the next actions that can be executed when continuing
-  #[prost(message, repeated, tag="5")]
+  #[prost(message, repeated, tag = "5")]
   pub continue_hints: Vec<ContinueHint>,
 }
 /// The GC state for a single team
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GcStateTeam {
   /// true: The team is connected
-  #[prost(bool, optional, tag="1")]
+  #[prost(bool, optional, tag = "1")]
   pub connected: Option<bool>,
   /// true: The team connected via TLS with a verified certificate
-  #[prost(bool, optional, tag="2")]
+  #[prost(bool, optional, tag = "2")]
   pub connection_verified: Option<bool>,
   /// true: The remote control for the team is connected
-  #[prost(bool, optional, tag="3")]
+  #[prost(bool, optional, tag = "3")]
   pub remote_control_connected: Option<bool>,
   /// true: The remote control for the team connected via TLS with a verified certificate
-  #[prost(bool, optional, tag="4")]
+  #[prost(bool, optional, tag = "4")]
   pub remote_control_connection_verified: Option<bool>,
   /// the advantage choice of the team
-  #[prost(message, optional, tag="5")]
+  #[prost(message, optional, tag = "5")]
   pub advantage_choice: Option<TeamAdvantageChoice>,
 }
 /// The choice from a team regarding the advantage rule
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct TeamAdvantageChoice {
   /// the choice of the team
-  #[prost(enumeration="team_advantage_choice::AdvantageChoice", optional, tag="1")]
+  #[prost(
+    enumeration = "team_advantage_choice::AdvantageChoice",
+    optional,
+    tag = "1"
+  )]
   pub choice: Option<i32>,
 }
 /// Nested message and enum types in `TeamAdvantageChoice`.
@@ -2051,61 +2057,61 @@ pub mod team_advantage_choice {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GcStateAutoRef {
   /// true: The autoRef connected via TLS with a verified certificate
-  #[prost(bool, optional, tag="1")]
+  #[prost(bool, optional, tag = "1")]
   pub connection_verified: Option<bool>,
 }
 /// GC state of a tracker
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GcStateTracker {
   /// Name of the source
-  #[prost(string, optional, tag="1")]
+  #[prost(string, optional, tag = "1")]
   pub source_name: Option<String>,
   /// UUID of the source
-  #[prost(string, optional, tag="4")]
+  #[prost(string, optional, tag = "4")]
   pub uuid: Option<String>,
   /// Current ball
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub ball: Option<Ball>,
   /// Current robots
-  #[prost(message, repeated, tag="3")]
+  #[prost(message, repeated, tag = "3")]
   pub robots: Vec<Robot>,
 }
 /// The ball state
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Ball {
   /// ball position \[m\]
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub pos: Option<Vector3>,
   /// ball velocity \[m/s\]
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub vel: Option<Vector3>,
 }
 /// The robot state
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Robot {
   /// robot id and team
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub id: Option<RobotId>,
   /// robot position \[m\]
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub pos: Option<Vector2>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ContinueAction {
   /// type of action that will be performed next
-  #[prost(enumeration="continue_action::Type", required, tag="1")]
+  #[prost(enumeration = "continue_action::Type", required, tag = "1")]
   pub r#type: i32,
   /// for which team (if team specific)
-  #[prost(enumeration="Team", required, tag="2")]
+  #[prost(enumeration = "Team", required, tag = "2")]
   pub for_team: i32,
   /// list of issues that hinders the game from continuing
-  #[prost(string, repeated, tag="3")]
+  #[prost(string, repeated, tag = "3")]
   pub continuation_issues: Vec<String>,
   /// timestamp at which the action will be ready (to give some preparation time)
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub ready_at: Option<prost_types::Timestamp>,
   /// state of the action
-  #[prost(enumeration="continue_action::State", optional, tag="5")]
+  #[prost(enumeration = "continue_action::State", optional, tag = "5")]
   pub state: Option<i32>,
 }
 /// Nested message and enum types in `ContinueAction`.
@@ -2237,26 +2243,26 @@ pub mod continue_action {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ContinueHint {
-  #[prost(string, required, tag="1")]
+  #[prost(string, required, tag = "1")]
   pub message: String,
 }
 /// The engine config
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Config {
   /// The behavior for each game event
-  #[prost(map="string, enumeration(config::Behavior)", tag="1")]
+  #[prost(map = "string, enumeration(config::Behavior)", tag = "1")]
   pub game_event_behavior: std::collections::HashMap<String, i32>,
   /// The config for each auto referee
-  #[prost(map="string, message", tag="2")]
+  #[prost(map = "string, message", tag = "2")]
   pub auto_ref_configs: std::collections::HashMap<String, AutoRefConfig>,
   /// The selected tracker source
-  #[prost(string, optional, tag="3")]
+  #[prost(string, optional, tag = "3")]
   pub active_tracker_source: Option<String>,
   /// The list of available teams
-  #[prost(string, repeated, tag="4")]
+  #[prost(string, repeated, tag = "4")]
   pub teams: Vec<String>,
   /// Enable or disable auto continuation
-  #[prost(bool, optional, tag="5")]
+  #[prost(bool, optional, tag = "5")]
   pub auto_continue: Option<bool>,
 }
 /// Nested message and enum types in `Config`.
@@ -2311,7 +2317,7 @@ pub mod config {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AutoRefConfig {
   /// The game event behaviors for this auto referee
-  #[prost(map="string, enumeration(auto_ref_config::Behavior)", tag="1")]
+  #[prost(map = "string, enumeration(auto_ref_config::Behavior)", tag = "1")]
   pub game_event_behavior: std::collections::HashMap<String, i32>,
 }
 /// Nested message and enum types in `AutoRefConfig`.
@@ -2358,16 +2364,16 @@ pub mod auto_ref_config {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Output {
   /// The current match state
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub match_state: Option<State>,
   /// The current GC state
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub gc_state: Option<GcState>,
   /// The protocol
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub protocol: Option<Protocol>,
   /// The engine config
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub config: Option<Config>,
 }
 /// The game protocol
@@ -2376,131 +2382,131 @@ pub struct Protocol {
   /// Is this a delta only?
   /// Entries that were already sent are not sent again, because the protocol is immutable anyway.
   /// But if the game is reset, the whole protocol must be replaced. That's what this flag is for.
-  #[prost(bool, optional, tag="1")]
+  #[prost(bool, optional, tag = "1")]
   pub delta: Option<bool>,
   /// The (delta) list of entries
-  #[prost(message, repeated, tag="2")]
+  #[prost(message, repeated, tag = "2")]
   pub entry: Vec<ProtocolEntry>,
 }
 /// A protocol entry of a change
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProtocolEntry {
   /// Id of the entry
-  #[prost(int32, optional, tag="1")]
+  #[prost(int32, optional, tag = "1")]
   pub id: Option<i32>,
   /// The change that was made
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub change: Option<Change>,
   /// The match time elapsed when this change was made
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub match_time_elapsed: Option<prost_types::Duration>,
   /// The stage time elapsed when this change was made
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub stage_time_elapsed: Option<prost_types::Duration>,
 }
 /// Message format that can be send from the client to the GC
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Input {
   /// A change to be enqueued into the GC engine
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub change: Option<Change>,
   /// Reset the match
-  #[prost(bool, optional, tag="2")]
+  #[prost(bool, optional, tag = "2")]
   pub reset_match: Option<bool>,
   /// An updated config delta
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub config_delta: Option<Config>,
   /// Continue with action
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub continue_action: Option<ContinueAction>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SslDetectionBall {
   /// Confidence in \[0-1\] of the detection
-  #[prost(float, required, tag="1")]
+  #[prost(float, required, tag = "1")]
   pub confidence: f32,
-  #[prost(uint32, optional, tag="2")]
+  #[prost(uint32, optional, tag = "2")]
   pub area: Option<u32>,
   /// X-coordinate in \[mm\] in global ssl-vision coordinate system
-  #[prost(float, required, tag="3")]
+  #[prost(float, required, tag = "3")]
   pub x: f32,
   /// Y-coordinate in \[mm\] in global ssl-vision coordinate system
-  #[prost(float, required, tag="4")]
+  #[prost(float, required, tag = "4")]
   pub y: f32,
   /// Z-coordinate in \[mm\] in global ssl-vision coordinate system
   /// Not supported by ssl-vision, but might be set by simulators
-  #[prost(float, optional, tag="5")]
+  #[prost(float, optional, tag = "5")]
   pub z: Option<f32>,
   /// X-coordinate in \[pixel\] in the image
-  #[prost(float, required, tag="6")]
+  #[prost(float, required, tag = "6")]
   pub pixel_x: f32,
   /// Y-coordinate in \[pixel\] in the image
-  #[prost(float, required, tag="7")]
+  #[prost(float, required, tag = "7")]
   pub pixel_y: f32,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SslDetectionRobot {
   /// Confidence in \[0-1\] of the detection
-  #[prost(float, required, tag="1")]
+  #[prost(float, required, tag = "1")]
   pub confidence: f32,
   /// Id of the robot
-  #[prost(uint32, optional, tag="2")]
+  #[prost(uint32, optional, tag = "2")]
   pub robot_id: Option<u32>,
   /// X-coordinate in \[mm\] in global ssl-vision coordinate system
-  #[prost(float, required, tag="3")]
+  #[prost(float, required, tag = "3")]
   pub x: f32,
   /// Y-coordinate in \[mm\] in global ssl-vision coordinate system
-  #[prost(float, required, tag="4")]
+  #[prost(float, required, tag = "4")]
   pub y: f32,
   /// Orientation in \[rad\]
-  #[prost(float, optional, tag="5")]
+  #[prost(float, optional, tag = "5")]
   pub orientation: Option<f32>,
   /// X-coordinate in \[pixel\] in the image
-  #[prost(float, required, tag="6")]
+  #[prost(float, required, tag = "6")]
   pub pixel_x: f32,
   /// Y-coordinate in \[pixel\] in the image
-  #[prost(float, required, tag="7")]
+  #[prost(float, required, tag = "7")]
   pub pixel_y: f32,
   /// Height, as configured in ssl-vision for the respective team
-  #[prost(float, optional, tag="8")]
+  #[prost(float, optional, tag = "8")]
   pub height: Option<f32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SslDetectionFrame {
   /// monotonously increasing frame number
-  #[prost(uint32, required, tag="1")]
+  #[prost(uint32, required, tag = "1")]
   pub frame_number: u32,
   /// Unix timestamp in \[seconds\] at which the image has been received by ssl-vision
-  #[prost(double, required, tag="2")]
+  #[prost(double, required, tag = "2")]
   pub t_capture: f64,
   /// Unix timestamp in \[seconds\] at which this message has been sent to the network
-  #[prost(double, required, tag="3")]
+  #[prost(double, required, tag = "3")]
   pub t_sent: f64,
   /// Camera timestamp in \[seconds\] as reported by the camera, if supported
   /// This is not necessarily a unix timestamp
-  #[prost(double, optional, tag="8")]
+  #[prost(double, optional, tag = "8")]
   pub t_capture_camera: Option<f64>,
   /// Identifier of the camera
-  #[prost(uint32, required, tag="4")]
+  #[prost(uint32, required, tag = "4")]
   pub camera_id: u32,
   /// Detected balls
-  #[prost(message, repeated, tag="5")]
+  #[prost(message, repeated, tag = "5")]
   pub balls: Vec<SslDetectionBall>,
   /// Detected yellow robots
-  #[prost(message, repeated, tag="6")]
+  #[prost(message, repeated, tag = "6")]
   pub robots_yellow: Vec<SslDetectionRobot>,
   /// Detected blue robots
-  #[prost(message, repeated, tag="7")]
+  #[prost(message, repeated, tag = "7")]
   pub robots_blue: Vec<SslDetectionRobot>,
 }
 /// A 2D float vector.
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Vector2f {
   /// X-coordinate in mm
-  #[prost(float, required, tag="1")]
+  #[prost(float, required, tag = "1")]
   pub x: f32,
   /// Y-coordinate in mm
-  #[prost(float, required, tag="2")]
+  #[prost(float, required, tag = "2")]
   pub y: f32,
 }
 /// Represents a field marking as a line segment represented by a start point p1,
@@ -2510,19 +2516,19 @@ pub struct Vector2f {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SslFieldLineSegment {
   /// Name of this field marking.
-  #[prost(string, required, tag="1")]
+  #[prost(string, required, tag = "1")]
   pub name: String,
   /// Start point of the line segment.
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub p1: Vector2f,
   /// End point of the line segment.
-  #[prost(message, required, tag="3")]
+  #[prost(message, required, tag = "3")]
   pub p2: Vector2f,
   /// Thickness of the line segment.
-  #[prost(float, required, tag="4")]
+  #[prost(float, required, tag = "4")]
   pub thickness: f32,
   /// The type of this shape
-  #[prost(enumeration="SslFieldShapeType", optional, tag="5")]
+  #[prost(enumeration = "SslFieldShapeType", optional, tag = "5")]
   pub r#type: Option<i32>,
 }
 /// Represents a field marking as a circular arc segment represented by center point, a
@@ -2530,116 +2536,116 @@ pub struct SslFieldLineSegment {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SslFieldCircularArc {
   /// Name of this field marking.
-  #[prost(string, required, tag="1")]
+  #[prost(string, required, tag = "1")]
   pub name: String,
   /// Center point of the circular arc.
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub center: Vector2f,
   /// Radius of the arc.
-  #[prost(float, required, tag="3")]
+  #[prost(float, required, tag = "3")]
   pub radius: f32,
   /// Start angle in counter-clockwise order.
-  #[prost(float, required, tag="4")]
+  #[prost(float, required, tag = "4")]
   pub a1: f32,
   /// End angle in counter-clockwise order.
-  #[prost(float, required, tag="5")]
+  #[prost(float, required, tag = "5")]
   pub a2: f32,
   /// Thickness of the arc.
-  #[prost(float, required, tag="6")]
+  #[prost(float, required, tag = "6")]
   pub thickness: f32,
   /// The type of this shape
-  #[prost(enumeration="SslFieldShapeType", optional, tag="7")]
+  #[prost(enumeration = "SslFieldShapeType", optional, tag = "7")]
   pub r#type: Option<i32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SslGeometryFieldSize {
   /// Field length (distance between goal lines) in mm
-  #[prost(int32, required, tag="1")]
+  #[prost(int32, required, tag = "1")]
   pub field_length: i32,
   /// Field width (distance between touch lines) in mm
-  #[prost(int32, required, tag="2")]
+  #[prost(int32, required, tag = "2")]
   pub field_width: i32,
   /// Goal width (distance between inner edges of goal posts) in mm
-  #[prost(int32, required, tag="3")]
+  #[prost(int32, required, tag = "3")]
   pub goal_width: i32,
   /// Goal depth (distance from outer goal line edge to inner goal back) in mm
-  #[prost(int32, required, tag="4")]
+  #[prost(int32, required, tag = "4")]
   pub goal_depth: i32,
   /// Boundary width (distance from touch line centers to boundary walls) in mm
-  #[prost(int32, required, tag="5")]
+  #[prost(int32, required, tag = "5")]
   pub boundary_width: i32,
   /// Boundary width at the goal lines (distance from goal line centers to boundary walls) in mm
-  #[prost(int32, optional, tag="16")]
+  #[prost(int32, optional, tag = "16")]
   pub boundary_width_goal_line: Option<i32>,
   /// Generated line segments based on the other parameters
-  #[prost(message, repeated, tag="6")]
+  #[prost(message, repeated, tag = "6")]
   pub field_lines: Vec<SslFieldLineSegment>,
   /// Generated circular arcs based on the other parameters
-  #[prost(message, repeated, tag="7")]
+  #[prost(message, repeated, tag = "7")]
   pub field_arcs: Vec<SslFieldCircularArc>,
   /// Depth of the penalty/defense area (measured between line centers) in mm
-  #[prost(int32, optional, tag="8")]
+  #[prost(int32, optional, tag = "8")]
   pub penalty_area_depth: Option<i32>,
   /// Width of the penalty/defense area (measured between line centers) in mm
-  #[prost(int32, optional, tag="9")]
+  #[prost(int32, optional, tag = "9")]
   pub penalty_area_width: Option<i32>,
   /// Radius of the center circle (measured between line centers) in mm
-  #[prost(int32, optional, tag="10")]
+  #[prost(int32, optional, tag = "10")]
   pub center_circle_radius: Option<i32>,
   /// Thickness/width of the lines on the field in mm
-  #[prost(int32, optional, tag="11")]
+  #[prost(int32, optional, tag = "11")]
   pub line_thickness: Option<i32>,
   /// Distance between the goal center and the center of the penalty mark in mm
-  #[prost(int32, optional, tag="12")]
+  #[prost(int32, optional, tag = "12")]
   pub goal_center_to_penalty_mark: Option<i32>,
   /// Goal height in mm
-  #[prost(int32, optional, tag="13")]
+  #[prost(int32, optional, tag = "13")]
   pub goal_height: Option<i32>,
   /// Ball radius in mm (note that this is a float type to represent sub-mm precision)
-  #[prost(float, optional, tag="14")]
+  #[prost(float, optional, tag = "14")]
   pub ball_radius: Option<f32>,
   /// Max allowed robot radius in mm (note that this is a float type to represent sub-mm precision)
-  #[prost(float, optional, tag="15")]
+  #[prost(float, optional, tag = "15")]
   pub max_robot_radius: Option<f32>,
   /// Width of the goal substitution area (distance from boundary walls that count as "inside the substitution area") in mm
-  #[prost(int32, optional, tag="17")]
+  #[prost(int32, optional, tag = "17")]
   pub goal_substitution_area_width: Option<i32>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SslGeometryCameraCalibration {
-  #[prost(uint32, required, tag="1")]
+  #[prost(uint32, required, tag = "1")]
   pub camera_id: u32,
-  #[prost(float, required, tag="2")]
+  #[prost(float, required, tag = "2")]
   pub focal_length: f32,
-  #[prost(float, required, tag="3")]
+  #[prost(float, required, tag = "3")]
   pub principal_point_x: f32,
-  #[prost(float, required, tag="4")]
+  #[prost(float, required, tag = "4")]
   pub principal_point_y: f32,
-  #[prost(float, required, tag="5")]
+  #[prost(float, required, tag = "5")]
   pub distortion: f32,
-  #[prost(float, required, tag="6")]
+  #[prost(float, required, tag = "6")]
   pub q0: f32,
-  #[prost(float, required, tag="7")]
+  #[prost(float, required, tag = "7")]
   pub q1: f32,
-  #[prost(float, required, tag="8")]
+  #[prost(float, required, tag = "8")]
   pub q2: f32,
-  #[prost(float, required, tag="9")]
+  #[prost(float, required, tag = "9")]
   pub q3: f32,
-  #[prost(float, required, tag="10")]
+  #[prost(float, required, tag = "10")]
   pub tx: f32,
-  #[prost(float, required, tag="11")]
+  #[prost(float, required, tag = "11")]
   pub ty: f32,
-  #[prost(float, required, tag="12")]
+  #[prost(float, required, tag = "12")]
   pub tz: f32,
-  #[prost(float, optional, tag="13")]
+  #[prost(float, optional, tag = "13")]
   pub derived_camera_world_tx: Option<f32>,
-  #[prost(float, optional, tag="14")]
+  #[prost(float, optional, tag = "14")]
   pub derived_camera_world_ty: Option<f32>,
-  #[prost(float, optional, tag="15")]
+  #[prost(float, optional, tag = "15")]
   pub derived_camera_world_tz: Option<f32>,
-  #[prost(uint32, optional, tag="16")]
+  #[prost(uint32, optional, tag = "16")]
   pub pixel_image_width: Option<u32>,
-  #[prost(uint32, optional, tag="17")]
+  #[prost(uint32, optional, tag = "17")]
   pub pixel_image_height: Option<u32>,
 }
 /// Two-Phase model for straight-kicked balls.
@@ -2651,13 +2657,13 @@ pub struct SslGeometryCameraCalibration {
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SslBallModelStraightTwoPhase {
   /// Ball sliding acceleration \[m/s^2\] (should be negative)
-  #[prost(double, required, tag="1")]
+  #[prost(double, required, tag = "1")]
   pub acc_slide: f64,
   /// Ball rolling acceleration \[m/s^2\] (should be negative)
-  #[prost(double, required, tag="2")]
+  #[prost(double, required, tag = "2")]
   pub acc_roll: f64,
   /// Fraction of the initial velocity where the ball starts to roll
-  #[prost(double, required, tag="3")]
+  #[prost(double, required, tag = "3")]
   pub k_switch: f64,
 }
 /// Fixed-Loss model for chipped balls.
@@ -2665,29 +2671,29 @@ pub struct SslBallModelStraightTwoPhase {
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SslBallModelChipFixedLoss {
   /// Chip kick velocity damping factor in XY direction for the first hop
-  #[prost(double, required, tag="1")]
+  #[prost(double, required, tag = "1")]
   pub damping_xy_first_hop: f64,
   /// Chip kick velocity damping factor in XY direction for all following hops
-  #[prost(double, required, tag="2")]
+  #[prost(double, required, tag = "2")]
   pub damping_xy_other_hops: f64,
   /// Chip kick velocity damping factor in Z direction for all hops
-  #[prost(double, required, tag="3")]
+  #[prost(double, required, tag = "3")]
   pub damping_z: f64,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct SslGeometryModels {
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub straight_two_phase: Option<SslBallModelStraightTwoPhase>,
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub chip_fixed_loss: Option<SslBallModelChipFixedLoss>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SslGeometryData {
-  #[prost(message, required, tag="1")]
+  #[prost(message, required, tag = "1")]
   pub field: SslGeometryFieldSize,
-  #[prost(message, repeated, tag="2")]
+  #[prost(message, repeated, tag = "2")]
   pub calib: Vec<SslGeometryCameraCalibration>,
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub models: Option<SslGeometryModels>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
@@ -2756,85 +2762,85 @@ impl SslFieldShapeType {
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TrackedBall {
   /// The position (x, y, height) \[m\] in the ssl-vision coordinate system
-  #[prost(message, required, tag="1")]
+  #[prost(message, required, tag = "1")]
   pub pos: Vector3,
   /// The velocity \[m/s\] in the ssl-vision coordinate system
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub vel: Option<Vector3>,
   /// The visibility of the ball
   /// A value between 0 (not visible) and 1 (visible)
   /// The exact implementation depends on the source software
-  #[prost(float, optional, tag="3")]
+  #[prost(float, optional, tag = "3")]
   pub visibility: Option<f32>,
 }
 /// A ball kicked by a robot, including predictions when the ball will come to a stop
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct KickedBall {
   /// The initial position \[m\] from which the ball was kicked
-  #[prost(message, required, tag="1")]
+  #[prost(message, required, tag = "1")]
   pub pos: Vector2,
   /// The initial velocity \[m/s\] with which the ball was kicked
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub vel: Vector3,
   /// The unix timestamp \[s\] when the kick was performed
-  #[prost(double, required, tag="3")]
+  #[prost(double, required, tag = "3")]
   pub start_timestamp: f64,
   /// The predicted unix timestamp \[s\] when the ball comes to a stop
-  #[prost(double, optional, tag="4")]
+  #[prost(double, optional, tag = "4")]
   pub stop_timestamp: Option<f64>,
   /// The predicted position \[m\] at which the ball will come to a stop
-  #[prost(message, optional, tag="5")]
+  #[prost(message, optional, tag = "5")]
   pub stop_pos: Option<Vector2>,
   /// The robot that kicked the ball
-  #[prost(message, optional, tag="6")]
+  #[prost(message, optional, tag = "6")]
   pub robot_id: Option<RobotId>,
 }
 /// A single tracked robot
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TrackedRobot {
-  #[prost(message, required, tag="1")]
+  #[prost(message, required, tag = "1")]
   pub robot_id: RobotId,
   /// The position \[m\] in the ssl-vision coordinate system
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub pos: Vector2,
   /// The orientation \[rad\] in the ssl-vision coordinate system
-  #[prost(float, required, tag="3")]
+  #[prost(float, required, tag = "3")]
   pub orientation: f32,
   /// The velocity \[m/s\] in the ssl-vision coordinate system
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub vel: Option<Vector2>,
   /// The angular velocity \[rad/s\] in the ssl-vision coordinate system
-  #[prost(float, optional, tag="5")]
+  #[prost(float, optional, tag = "5")]
   pub vel_angular: Option<f32>,
   /// The visibility of the robot
   /// A value between 0 (not visible) and 1 (visible)
   /// The exact implementation depends on the source software
-  #[prost(float, optional, tag="6")]
+  #[prost(float, optional, tag = "6")]
   pub visibility: Option<f32>,
 }
 /// A frame that contains all currently tracked objects on the field on all cameras
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TrackedFrame {
   /// A monotonous increasing frame counter
-  #[prost(uint32, required, tag="1")]
+  #[prost(uint32, required, tag = "1")]
   pub frame_number: u32,
   /// The unix timestamp in \[s\] of the data
-  #[prost(double, required, tag="2")]
+  #[prost(double, required, tag = "2")]
   pub timestamp: f64,
   /// The list of detected balls
   /// The first ball is the primary one
   /// Sources may add additional balls based on their capabilities
-  #[prost(message, repeated, tag="3")]
+  #[prost(message, repeated, tag = "3")]
   pub balls: Vec<TrackedBall>,
   /// The list of detected robots of both teams
-  #[prost(message, repeated, tag="4")]
+  #[prost(message, repeated, tag = "4")]
   pub robots: Vec<TrackedRobot>,
   /// Information about a kicked ball, if the ball was kicked by a robot and is still moving
   /// Note: This field is optional. Some source implementations might not set this at any time
-  #[prost(message, optional, tag="5")]
+  #[prost(message, optional, tag = "5")]
   pub kicked_ball: Option<KickedBall>,
   /// List of capabilities of the source implementation
-  #[prost(enumeration="Capability", repeated, packed="false", tag="6")]
+  #[prost(enumeration = "Capability", repeated, packed = "false", tag = "6")]
   pub capabilities: Vec<i32>,
 }
 // Default network address: 224.5.23.2:10010
@@ -2911,13 +2917,13 @@ impl Capability {
 pub struct TrackerWrapperPacket {
   /// A random UUID of the source that is kept constant at the source while running
   /// If multiple sources are broadcasting to the same network, this id can be used to identify individual sources
-  #[prost(string, required, tag="1")]
+  #[prost(string, required, tag = "1")]
   pub uuid: String,
   /// The name of the source software that is producing this messages.
-  #[prost(string, optional, tag="2")]
+  #[prost(string, optional, tag = "2")]
   pub source_name: Option<String>,
   /// The tracked frame
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub tracked_frame: Option<TrackedFrame>,
 }
 /// The AutoRefCiInput contains all packets/messages that would otherwise be received through multicast by the auto-referee
@@ -2925,16 +2931,16 @@ pub struct TrackerWrapperPacket {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AutoRefCiInput {
   /// Latest referee message
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub referee_message: Option<Referee>,
   /// A tracked SSL-Vision packet to be processed without filtering
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub tracker_wrapper_packet: Option<TrackerWrapperPacket>,
   /// A list of unfiltered SSL-Vision packets (for multiple cameras) to be filtered and processed
-  #[prost(message, repeated, tag="3")]
+  #[prost(message, repeated, tag = "3")]
   pub detection: Vec<SslDetectionFrame>,
   /// Current geometry data, to be sent at least once at the beginning of the connection
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub geometry: Option<SslGeometryData>,
 }
 /// The AutoRefCiOutput contains any new data created by the auto-referee for further processing
@@ -2943,134 +2949,134 @@ pub struct AutoRefCiOutput {
   /// A resulting tracked SSL-Vision packet for input into the ssl-game-controller.
   /// The auto-referee will either generate it from the unfiltered SSL-Vision packets
   /// or simply return the tracked packet from the input.
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub tracker_wrapper_packet: Option<TrackerWrapperPacket>,
 }
 /// The input format to the GC
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CiInput {
   /// New unix timestamp in \[ns\] for the GC
-  #[prost(int64, optional, tag="1")]
+  #[prost(int64, optional, tag = "1")]
   pub timestamp: Option<i64>,
   /// New tracker packet with ball and robot data
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub tracker_packet: Option<TrackerWrapperPacket>,
   /// (UI) API input
-  #[prost(message, repeated, tag="3")]
+  #[prost(message, repeated, tag = "3")]
   pub api_inputs: Vec<Input>,
   /// Update geometry
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub geometry: Option<SslGeometryData>,
 }
 /// The output format of the GC response
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CiOutput {
   /// Latest referee message
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub referee_msg: Option<Referee>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CpBall {
   /// The position \[mm\] in the ssl-vision coordinate system
-  #[prost(message, required, tag="1")]
+  #[prost(message, required, tag = "1")]
   pub pos: CpVector2,
   /// The velocity \[mm/s\] in the ssl-vision coordinate system
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub vel: Option<CpVector2>,
 }
 /// From the tracked ssl vision packet, removed unnecessary fields
 /// A single tracked robot
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CpTrackedRobot {
-  #[prost(uint32, required, tag="1")]
+  #[prost(uint32, required, tag = "1")]
   pub robot_id: u32,
   /// The position \[mm\] in the ssl-vision coordinate system
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub pos: CpVector2,
   /// The orientation \[degree\] in the ssl-vision coordinate system
-  #[prost(int32, required, tag="3")]
+  #[prost(int32, required, tag = "3")]
   pub orientation: i32,
   /// The velocity \[m/s\] in the ssl-vision coordinate system
-  #[prost(message, optional, tag="4")]
+  #[prost(message, optional, tag = "4")]
   pub vel: Option<CpVector2>,
   /// The visibility, 0 means not visible, 255 means fully visible, the rest is in between
-  #[prost(uint32, required, tag="5")]
+  #[prost(uint32, required, tag = "5")]
   pub visibility: u32,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CpVector2 {
-  #[prost(int32, required, tag="1")]
+  #[prost(int32, required, tag = "1")]
   pub x: i32,
-  #[prost(int32, required, tag="2")]
+  #[prost(int32, required, tag = "2")]
   pub y: i32,
 }
 /// The message from the crash pilot to the robot
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CpRobot {
   /// Some fields to check stuff, drop all packets that are really late (for now 400ms) and the packet id should also be newer than the last one
-  #[prost(uint32, required, tag="1")]
+  #[prost(uint32, required, tag = "1")]
   pub robot_id: u32,
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub timestamp: prost_types::Timestamp,
-  #[prost(uint32, required, tag="3")]
+  #[prost(uint32, required, tag = "3")]
   pub packet_id: u32,
   /// the ball data,
-  #[prost(message, required, tag="4")]
+  #[prost(message, required, tag = "4")]
   pub ball: CpBall,
   /// The robots, the robot can extract their own position easily, because you should now your own robot id.
-  #[prost(message, repeated, tag="5")]
+  #[prost(message, repeated, tag = "5")]
   pub robots_yellow: Vec<CpTrackedRobot>,
-  #[prost(message, repeated, tag="6")]
+  #[prost(message, repeated, tag = "6")]
   pub robots_blue: Vec<CpTrackedRobot>,
   /// The actual command
-  #[prost(message, required, tag="7")]
+  #[prost(message, required, tag = "7")]
   pub cmd: CpCommand,
   /// Info about the current game, including team, field setup etc
-  #[prost(message, required, tag="8")]
+  #[prost(message, required, tag = "8")]
   pub infos: CpInfos,
 }
 /// The commands as enums and the fields are for stuff like drive to position and kick
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CpCommand {
-  #[prost(enumeration="CpState", required, tag="1")]
+  #[prost(enumeration = "CpState", required, tag = "1")]
   pub state: i32,
-  #[prost(enumeration="CpTask", required, tag="2")]
+  #[prost(enumeration = "CpTask", required, tag = "2")]
   pub task: i32,
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub pos: Option<CpVector2>,
-  #[prost(uint32, optional, tag="4")]
+  #[prost(uint32, optional, tag = "4")]
   pub speed: Option<u32>,
-  #[prost(uint32, optional, tag="5")]
+  #[prost(uint32, optional, tag = "5")]
   pub orientation: Option<u32>,
-  #[prost(uint32, optional, tag="6")]
+  #[prost(uint32, optional, tag = "6")]
   pub kick_orient: Option<u32>,
-  #[prost(uint32, optional, tag="7")]
+  #[prost(uint32, optional, tag = "7")]
   pub kick_speed: Option<u32>,
-  #[prost(uint32, optional, tag="8")]
+  #[prost(uint32, optional, tag = "8")]
   pub enemy_id: Option<u32>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CpInfos {
   /// false for yellow and true for blue
-  #[prost(bool, required, tag="1")]
+  #[prost(bool, required, tag = "1")]
   pub team_color: bool,
   /// Our defensive site
   /// false for x+ and true for x-
-  #[prost(bool, required, tag="2")]
+  #[prost(bool, required, tag = "2")]
   pub team_site: bool,
   /// General field info, used for orca
   /// Everything is in mm
-  #[prost(uint32, required, tag="3")]
+  #[prost(uint32, required, tag = "3")]
   pub width: u32,
-  #[prost(uint32, required, tag="4")]
+  #[prost(uint32, required, tag = "4")]
   pub height: u32,
-  #[prost(uint32, required, tag="5")]
+  #[prost(uint32, required, tag = "5")]
   pub runoff_width: u32,
-  #[prost(uint32, required, tag="6")]
+  #[prost(uint32, required, tag = "6")]
   pub penalty_area_width: u32,
-  #[prost(uint32, required, tag="7")]
+  #[prost(uint32, required, tag = "7")]
   pub penalty_area_height: u32,
-  #[prost(uint32, required, tag="8")]
+  #[prost(uint32, required, tag = "8")]
   pub goal_width: u32,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
@@ -3186,11 +3192,11 @@ impl CpTask {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SslWrapperPacket {
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub detection: Option<SslDetectionFrame>,
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub geometry: Option<SslGeometryData>,
-  #[prost(enumeration="SslSource", optional, tag="3")]
+  #[prost(enumeration = "SslSource", optional, tag = "3")]
   pub source: Option<i32>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
@@ -3234,84 +3240,84 @@ impl SslSource {
 /// buf:lint:ignore MESSAGE_PASCAL_CASE
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CpInterfaceWrapper {
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub vision_raw: Option<SslWrapperPacket>,
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub vision_tracked: Option<TrackerWrapperPacket>,
-  #[prost(message, optional, tag="3")]
+  #[prost(message, optional, tag = "3")]
   pub gc_data: Option<Referee>,
-  #[prost(message, repeated, tag="4")]
+  #[prost(message, repeated, tag = "4")]
   pub robot_commands: Vec<CpRobot>,
 }
 /// buf:lint:ignore MESSAGE_PASCAL_CASE
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct InterfaceWrapperCp {
-  #[prost(message, repeated, tag="1")]
+  #[prost(message, repeated, tag = "1")]
   pub robot_commands: Vec<InterfaceRobotCommandsCp>,
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub interface_command: InterfaceCommandCp,
 }
 /// buf:lint:ignore MESSAGE_PASCAL_CASE
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InterfaceRobotCommandsCp {
-  #[prost(uint32, required, tag="1")]
+  #[prost(uint32, required, tag = "1")]
   pub robot_id: u32,
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub command: CpCommand,
 }
 /// buf:lint:ignore MESSAGE_PASCAL_CASE
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InterfaceCommandCp {
-  #[prost(enumeration="CpMode", required, tag="1")]
+  #[prost(enumeration = "CpMode", required, tag = "1")]
   pub mode: i32,
-  #[prost(message, required, tag="2")]
+  #[prost(message, required, tag = "2")]
   pub manual: InterfaceManualCp,
-  #[prost(message, required, tag="3")]
+  #[prost(message, required, tag = "3")]
   pub game: InterfaceGameCp,
-  #[prost(message, required, tag="4")]
+  #[prost(message, required, tag = "4")]
   pub test: InterfaceTestCp,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InterfaceManualCp {
   /// You can decide which quadrant the robot should use to test
   /// 0: -x +y || 1: +x +y || 2: +x -y || 3: -x -y
-  #[prost(bool, required, tag="1")]
+  #[prost(bool, required, tag = "1")]
   pub enable_testfield: bool,
-  #[prost(uint32, required, tag="2")]
+  #[prost(uint32, required, tag = "2")]
   pub testfield: u32,
   /// You can tell CP to use the raw ball data with a simple consistency filter
   /// The tracked vision doesn't work that good with multiple balls, so for testing we can switch to the raw vision
-  #[prost(bool, required, tag="3")]
+  #[prost(bool, required, tag = "3")]
   pub ball_tracked: bool,
   /// Enable listening to the game controller data, for testing you can switch it off to test the behaviour without the game controller data
-  #[prost(bool, required, tag="4")]
+  #[prost(bool, required, tag = "4")]
   pub gc_data: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InterfaceGameCp {
   /// Start or Stop
-  #[prost(bool, required, tag="1")]
+  #[prost(bool, required, tag = "1")]
   pub running: bool,
   /// Set the side. false for x+, true for x-
-  #[prost(bool, required, tag="2")]
+  #[prost(bool, required, tag = "2")]
   pub side: bool,
   /// Set the team color. False for Yellow, true for Blue
-  #[prost(bool, required, tag="3")]
+  #[prost(bool, required, tag = "3")]
   pub team_color: bool,
   /// Set the robot, that should be goalkeeper
-  #[prost(uint32, required, tag="4")]
+  #[prost(uint32, required, tag = "4")]
   pub goalkeeper_id: u32,
   /// Set the max speed for the game in mm/s, 0 for unlimited
-  #[prost(uint32, required, tag="5")]
+  #[prost(uint32, required, tag = "5")]
   pub max_speed: u32,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InterfaceTestCp {
   /// Set the test, that should be executed
-  #[prost(enumeration="CpTests", required, tag="2")]
+  #[prost(enumeration = "CpTests", required, tag = "2")]
   pub test: i32,
   /// Select the robots, that should be used for the test
-  #[prost(uint32, repeated, packed="false", tag="3")]
+  #[prost(uint32, repeated, packed = "false", tag = "3")]
   pub robot_ids: Vec<u32>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
@@ -3378,40 +3384,40 @@ impl CpMode {
 /// The packet the robot should send back
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RobotCp {
-  #[prost(uint32, required, tag="1")]
+  #[prost(uint32, required, tag = "1")]
   pub robot_id: u32,
-  #[prost(uint32, optional, tag="2")]
+  #[prost(uint32, optional, tag = "2")]
   pub battery_voltage: Option<u32>,
-  #[prost(uint32, optional, tag="3")]
+  #[prost(uint32, optional, tag = "3")]
   pub current: Option<u32>,
-  #[prost(bool, required, tag="4")]
+  #[prost(bool, required, tag = "4")]
   pub kicker_ready: bool,
-  #[prost(bool, required, tag="5")]
+  #[prost(bool, required, tag = "5")]
   pub has_ball: bool,
-  #[prost(bool, optional, tag="6")]
+  #[prost(bool, optional, tag = "6")]
   pub has_error: Option<bool>,
-  #[prost(bool, optional, tag="7")]
+  #[prost(bool, optional, tag = "7")]
   pub acting: Option<bool>,
-  #[prost(uint32, optional, tag="8")]
+  #[prost(uint32, optional, tag = "8")]
   pub last_rec_packet: Option<u32>,
 }
 /// a reply that is sent by the controller for each request from teams or autoRefs
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ControllerReply {
   /// status_code is an optional code that indicates the result of the last request
-  #[prost(enumeration="controller_reply::StatusCode", optional, tag="1")]
+  #[prost(enumeration = "controller_reply::StatusCode", optional, tag = "1")]
   pub status_code: Option<i32>,
   /// reason is an optional explanation of the status code
-  #[prost(string, optional, tag="2")]
+  #[prost(string, optional, tag = "2")]
   pub reason: Option<String>,
   /// next_token must be send with the next request, if secure communication is used
   /// the token is used to avoid replay attacks
   /// the token is always present in the very first message before the registration starts
   /// the token is not present, if secure communication is not used
-  #[prost(string, optional, tag="3")]
+  #[prost(string, optional, tag = "3")]
   pub next_token: Option<String>,
   /// verification indicates if the last request could be verified (secure communication)
-  #[prost(enumeration="controller_reply::Verification", optional, tag="4")]
+  #[prost(enumeration = "controller_reply::Verification", optional, tag = "4")]
   pub verification: Option<i32>,
 }
 /// Nested message and enum types in `ControllerReply`.
@@ -3479,36 +3485,36 @@ pub mod controller_reply {
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Signature {
   /// the token that was received with the last controller reply
-  #[prost(string, required, tag="1")]
+  #[prost(string, required, tag = "1")]
   pub token: String,
   /// the PKCS1v15 signature of this message
-  #[prost(bytes="vec", required, tag="2")]
+  #[prost(bytes = "vec", required, tag = "2")]
   pub pkcs1v15: Vec<u8>,
 }
 /// AutoRefRegistration is the first message that a client must send to the controller to identify itself
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct AutoRefRegistration {
   /// identifier is a unique name of the client
-  #[prost(string, required, tag="1")]
+  #[prost(string, required, tag = "1")]
   pub identifier: String,
   /// signature can optionally be specified to enable secure communication
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub signature: Option<Signature>,
 }
 /// AutoRefToController is the wrapper message for all subsequent messages from the autoRef to the controller
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AutoRefToController {
   /// signature can optionally be specified to enable secure communication
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub signature: Option<Signature>,
   /// game_event is an optional event that the autoRef detected during the game
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub game_event: Option<GameEvent>,
 }
 /// ControllerToAutoRef is the wrapper message for all messages from controller to autoRef
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ControllerToAutoRef {
-  #[prost(oneof="controller_to_auto_ref::Msg", tags="1")]
+  #[prost(oneof = "controller_to_auto_ref::Msg", tags = "1")]
   pub msg: Option<controller_to_auto_ref::Msg>,
 }
 /// Nested message and enum types in `ControllerToAutoRef`.
@@ -3516,7 +3522,7 @@ pub mod controller_to_auto_ref {
   #[derive(Clone, PartialEq, Eq, Hash, prost::Oneof)]
   pub enum Msg {
     /// a reply from the controller
-    #[prost(message, tag="1")]
+    #[prost(message, tag = "1")]
     ControllerReply(super::ControllerReply),
   }
 }
@@ -3524,19 +3530,19 @@ pub mod controller_to_auto_ref {
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RemoteControlRegistration {
   /// the team to be controlled
-  #[prost(enumeration="Team", required, tag="1")]
+  #[prost(enumeration = "Team", required, tag = "1")]
   pub team: i32,
   /// signature can optionally be specified to enable secure communication
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub signature: Option<Signature>,
 }
 /// wrapper for all messages from the remote control to the controller
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RemoteControlToController {
   /// signature can optionally be specified to enable secure communication
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub signature: Option<Signature>,
-  #[prost(oneof="remote_control_to_controller::Msg", tags="2, 3, 4, 5, 6")]
+  #[prost(oneof = "remote_control_to_controller::Msg", tags = "2, 3, 4, 5, 6")]
   pub msg: Option<remote_control_to_controller::Msg>,
 }
 /// Nested message and enum types in `RemoteControlToController`.
@@ -3583,22 +3589,22 @@ pub mod remote_control_to_controller {
   #[derive(Clone, Copy, PartialEq, Eq, Hash, prost::Oneof)]
   pub enum Msg {
     /// send a request to the GC
-    #[prost(enumeration="Request", tag="2")]
+    #[prost(enumeration = "Request", tag = "2")]
     Request(i32),
     /// request a new desired keeper id
-    #[prost(int32, tag="3")]
+    #[prost(int32, tag = "3")]
     DesiredKeeper(i32),
     /// true: request to substitute a robot at the next possibility
     /// false: cancel request
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     RequestRobotSubstitution(bool),
     /// true: request a timeout with the next stoppage
     /// false: cancel the request
-    #[prost(bool, tag="5")]
+    #[prost(bool, tag = "5")]
     RequestTimeout(bool),
     /// true: initiate an emergency stop
     /// false: cancel the request
-    #[prost(bool, tag="6")]
+    #[prost(bool, tag = "6")]
     RequestEmergencyStop(bool),
   }
 }
@@ -3606,57 +3612,67 @@ pub mod remote_control_to_controller {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ControllerToRemoteControl {
   /// a reply from the controller
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub controller_reply: Option<ControllerReply>,
   /// current team state
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub state: Option<RemoteControlTeamState>,
 }
 /// Current team state from Controller for remote control
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoteControlTeamState {
   /// the team that is controlled
-  #[prost(enumeration="Team", optional, tag="12")]
+  #[prost(enumeration = "Team", optional, tag = "12")]
   pub team: Option<i32>,
   /// list of all currently available request types that can be made
-  #[prost(enumeration="RemoteControlRequestType", repeated, packed="false", tag="1")]
+  #[prost(
+    enumeration = "RemoteControlRequestType",
+    repeated,
+    packed = "false",
+    tag = "1"
+  )]
   pub available_requests: Vec<i32>,
   /// list of all currently active request types that are pending
-  #[prost(enumeration="RemoteControlRequestType", repeated, packed="false", tag="2")]
+  #[prost(
+    enumeration = "RemoteControlRequestType",
+    repeated,
+    packed = "false",
+    tag = "2"
+  )]
   pub active_requests: Vec<i32>,
   /// currently set keeper id
-  #[prost(int32, optional, tag="3")]
+  #[prost(int32, optional, tag = "3")]
   pub keeper_id: Option<i32>,
   /// number of seconds till emergency stop is executed
   /// zero, if no emergency stop requested
-  #[prost(float, optional, tag="4")]
+  #[prost(float, optional, tag = "4")]
   pub emergency_stop_in: Option<f32>,
   /// number of timeouts left for the team
-  #[prost(int32, optional, tag="5")]
+  #[prost(int32, optional, tag = "5")]
   pub timeouts_left: Option<i32>,
   /// number of seconds left for timeout for the team
-  #[prost(float, optional, tag="10")]
+  #[prost(float, optional, tag = "10")]
   pub timeout_time_left: Option<f32>,
   /// number of challenge flags left for the team
-  #[prost(int32, optional, tag="6")]
+  #[prost(int32, optional, tag = "6")]
   pub challenge_flags_left: Option<i32>,
   /// max number of robots currently allowed
-  #[prost(int32, optional, tag="7")]
+  #[prost(int32, optional, tag = "7")]
   pub max_robots: Option<i32>,
   /// current number of robots visible on field
-  #[prost(int32, optional, tag="9")]
+  #[prost(int32, optional, tag = "9")]
   pub robots_on_field: Option<i32>,
   /// list of due times for each active yellow card (in seconds)
-  #[prost(float, repeated, packed="false", tag="8")]
+  #[prost(float, repeated, packed = "false", tag = "8")]
   pub yellow_cards_due: Vec<f32>,
   /// if true, team is allowed to substitute robots
-  #[prost(bool, optional, tag="11")]
+  #[prost(bool, optional, tag = "11")]
   pub can_substitute_robot: Option<bool>,
   /// number of bot substitutions left by the team in this halftime
-  #[prost(uint32, optional, tag="13")]
+  #[prost(uint32, optional, tag = "13")]
   pub bot_substitutions_left: Option<u32>,
   /// number of seconds left for current bot substitution
-  #[prost(float, optional, tag="14")]
+  #[prost(float, optional, tag = "14")]
   pub bot_substitution_time_left: Option<f32>,
 }
 /// All possible request types that the remote control can make
@@ -3708,22 +3724,22 @@ impl RemoteControlRequestType {
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct TeamRegistration {
   /// the exact team name as published by the game-controller
-  #[prost(string, required, tag="1")]
+  #[prost(string, required, tag = "1")]
   pub team_name: String,
   /// signature can optionally be specified to enable secure communication
-  #[prost(message, optional, tag="2")]
+  #[prost(message, optional, tag = "2")]
   pub signature: Option<Signature>,
   /// the team (relevant only if a team plays against itself)
-  #[prost(enumeration="Team", optional, tag="3")]
+  #[prost(enumeration = "Team", optional, tag = "3")]
   pub team: Option<i32>,
 }
 /// wrapper for all messages from a team's computer to the controller
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct TeamToController {
   /// signature can optionally be specified to enable secure communication
-  #[prost(message, optional, tag="1")]
+  #[prost(message, optional, tag = "1")]
   pub signature: Option<Signature>,
-  #[prost(oneof="team_to_controller::Msg", tags="2, 3, 4, 5")]
+  #[prost(oneof = "team_to_controller::Msg", tags = "2, 3, 4, 5")]
   pub msg: Option<team_to_controller::Msg>,
 }
 /// Nested message and enum types in `TeamToController`.
@@ -3731,24 +3747,24 @@ pub mod team_to_controller {
   #[derive(Clone, Copy, PartialEq, Eq, Hash, prost::Oneof)]
   pub enum Msg {
     /// request a new desired keeper id
-    #[prost(int32, tag="2")]
+    #[prost(int32, tag = "2")]
     DesiredKeeper(i32),
     /// response to an advantage choice request
-    #[prost(enumeration="super::AdvantageChoice", tag="3")]
+    #[prost(enumeration = "super::AdvantageChoice", tag = "3")]
     AdvantageChoice(i32),
     /// request to substitute a robot at the next possibility
-    #[prost(bool, tag="4")]
+    #[prost(bool, tag = "4")]
     SubstituteBot(bool),
     /// send a ping to the GC to test if the connection is still open.
     /// the value is ignored and a reply is sent back
-    #[prost(bool, tag="5")]
+    #[prost(bool, tag = "5")]
     Ping(bool),
   }
 }
 /// wrapper for all messages from controller to a team's computer
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ControllerToTeam {
-  #[prost(oneof="controller_to_team::Msg", tags="1")]
+  #[prost(oneof = "controller_to_team::Msg", tags = "1")]
   pub msg: Option<controller_to_team::Msg>,
 }
 /// Nested message and enum types in `ControllerToTeam`.
@@ -3756,7 +3772,7 @@ pub mod controller_to_team {
   #[derive(Clone, PartialEq, Eq, Hash, prost::Oneof)]
   pub enum Msg {
     /// a reply from the controller
-    #[prost(message, tag="1")]
+    #[prost(message, tag = "1")]
     ControllerReply(super::ControllerReply),
   }
 }

@@ -1,6 +1,6 @@
-use num_traits::{Float, Num};
-use num_traits::real::Real;
 use crate::vec::types::{Axis, Vec2, Vec3};
+use num_traits::real::Real;
+use num_traits::{Float, Num};
 
 
 impl<T: Num + Real + Copy> Vec2<T> {

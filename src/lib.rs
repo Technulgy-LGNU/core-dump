@@ -1,2 +1,2 @@
-pub mod vec;
 pub mod proto;
+pub mod vec;
