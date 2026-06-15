@@ -1,5 +1,5 @@
 use crate::proto::{CpVector2, Vector2};
-use num_traits::Zero;
+use num_traits::{NumCast, Zero};
 use std::ops::Div;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -48,11 +48,11 @@ impl<T> Vec2<T> {
   #[inline]
   pub fn tp_cp_vec2(self) -> CpVector2
   where
-    T: Into<i32>,
+    T: NumCast + Copy,
   {
     CpVector2 {
-      x: self.x.into(),
-      y: self.y.into(),
+      x: NumCast::from(self.x).unwrap_or_default(),
+      y: NumCast::from(self.y).unwrap_or_default(),
     }
   }
 }
