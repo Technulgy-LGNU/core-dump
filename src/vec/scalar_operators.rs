@@ -98,6 +98,20 @@ where
     }
     T::into(deg.round())
   }
+
+  #[inline]
+  pub fn angle_from_y_axis(self) -> T {
+    let mut angle = self.y.atan2(self.x).to_degrees() - T::from(90.0).unwrap();
+
+    if angle <= T::from(-180).unwrap() {
+      angle += T::from(360).unwrap();
+    }
+    if angle > T::from(180).unwrap() {
+      angle -= T::from(360).unwrap();
+    }
+
+    angle
+  }
 }
 
 /// Float Specifics
