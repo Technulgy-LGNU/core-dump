@@ -1,4 +1,3 @@
-use crate::proto::CpVector2;
 use crate::vec::types::{Axis, Vec2, Vec3};
 use num_traits::real::Real;
 use num_traits::{Float, Num};
@@ -82,18 +81,12 @@ impl<T: Float> Vec2<T> {
     let projection = a + ab * t;
     self.distance(projection)
   }
-
-  /// Scale AI Values back to actual values
-  #[inline]
-  pub fn scale_by_vec(self, scale: Vec2<T>) -> CpVector2
-  where
-    T: Into<Self>,
-  {
-    (self * scale).to_cp_vec2()
-  }
 }
 
-impl<T: Float + AddAssign + std::ops::SubAssign> Vec2<T> where u16: From<T> {
+impl<T: Float + AddAssign + std::ops::SubAssign> Vec2<T>
+where
+  u16: From<T>,
+{
   #[inline]
   pub fn angle_in_u16(self) -> u16 {
     let mut deg = self.y.atan2(self.x).to_degrees();
