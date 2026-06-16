@@ -1,6 +1,5 @@
 use crate::proto::{CpVector2, Vector2};
 use num_traits::{NumCast, Zero};
-use std::ops::Div;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -75,17 +74,6 @@ impl<T: Zero> Vec2<T> {
   }
 }
 
-impl<T> Vec2<T>
-where
-  T: Div<Output = T> + Copy,
-{
-  pub fn divide_by_scale(self, scale: Vec2<T>) -> Self {
-    Self {
-      x: self.x / scale.x,
-      y: self.y / scale.y,
-    }
-  }
-}
 impl<T> Vec3<T> {
   #[inline]
   pub fn new(x: T, y: T, z: T) -> Self {
