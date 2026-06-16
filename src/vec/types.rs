@@ -45,6 +45,14 @@ impl<T> Vec2<T> {
   }
 
   #[inline]
+  pub fn new_from_cp_vec2(v: CpVector2) -> Self
+  where
+    T: From<i32>,
+  {
+    Self::new(T::from(v.x), T::from(v.y))
+  }
+
+  #[inline]
   pub fn to_cp_vec2(self) -> CpVector2
   where
     T: NumCast + Copy,
