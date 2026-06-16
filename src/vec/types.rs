@@ -46,7 +46,7 @@ impl<T> Vec2<T> {
   }
 
   #[inline]
-  pub fn tp_cp_vec2(self) -> CpVector2
+  pub fn to_cp_vec2(self) -> CpVector2
   where
     T: NumCast + Copy,
   {

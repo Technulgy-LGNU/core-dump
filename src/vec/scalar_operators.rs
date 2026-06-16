@@ -1,7 +1,7 @@
+use crate::proto::CpVector2;
 use crate::vec::types::{Axis, Vec2, Vec3};
 use num_traits::real::Real;
 use num_traits::{Float, Num};
-
 
 impl<T: Num + Real + Copy> Vec2<T> {
   pub fn get(&self, axis: Axis) -> T {
@@ -80,6 +80,15 @@ impl<T: Float> Vec2<T> {
     let t = ((self - a).dot(&ab) / denom).max(T::zero()).min(T::one());
     let projection = a + ab * t;
     self.distance(projection)
+  }
+
+  /// Scale AI Values back to actual values
+  #[inline]
+  pub fn scale_by_vec(self, scale: Vec2<T>) -> CpVector2
+  where
+    T: Into<Self>,
+  {
+    (self * scale).to_cp_vec2()
   }
 }
 
