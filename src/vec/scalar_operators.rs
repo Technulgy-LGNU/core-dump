@@ -1,23 +1,28 @@
 use crate::vec::types::{Axis, Vec2, Vec3};
 use num_traits::real::Real;
-use num_traits::{Float, Num};
+use num_traits::{Float, Num, NumCast};
 use std::ops::AddAssign;
 
-impl<T: Num + Real + Copy> Vec2<T> {
+impl<T: Num + Real + Copy + NumCast + Default> Vec2<T> {
+  #[inline]
   pub fn get(&self, axis: Axis) -> T {
     match axis {
       Axis::X => self.x,
       Axis::Y => self.y,
     }
   }
+
+  #[inline]
   pub fn dot(&self, other: &Self) -> T {
     self.x * other.x + self.y * other.y
   }
 
+  #[inline]
   pub fn length(&self) -> T {
     self.dot(self).sqrt()
   }
 
+  #[inline]
   pub fn scale_to(&self, new_length: T) -> Self {
     let current_length = self.length();
 
@@ -33,16 +38,41 @@ impl<T: Num + Real + Copy> Vec2<T> {
     }
   }
 
+  #[inline]
   pub fn powf(&self, n: T) -> Self {
     Self {
       x: self.x.powf(n),
       y: self.y.powf(n),
     }
   }
+
+  #[inline]
+  pub fn with_speed_clamped(self, max_speed: T) -> Self {
+    let vx: f64 = NumCast::from(self.x).unwrap();
+    let vy: f64 = NumCast::from(self.y).unwrap();
+    let max_speed: f64 = NumCast::from(max_speed).unwrap();
+
+    let s = (vx * vx + vy * vy).sqrt();
+
+    if s < 1e-6 {
+      return Self::default();
+    }
+
+    if s <= max_speed {
+      return self;
+    }
+
+    let k = max_speed / s;
+
+    Self {
+      x: NumCast::from(vx * k).unwrap(),
+      y: NumCast::from(vy * k).unwrap(),
+    }
+  }
 }
 
 /// Float Specifics
-impl<T: Float> Vec2<T> {
+impl<T: Float + NumCast + Default + Copy> Vec2<T> {
   #[inline]
   pub fn norm_squared(self) -> T {
     self.x * self.x + self.y * self.y
@@ -71,6 +101,7 @@ impl<T: Float> Vec2<T> {
   }
 
   /// Shortest distance from this point to the segment `a`–`b`.
+  #[inline]
   pub fn distance_to_segment(self, a: Self, b: Self) -> T {
     let ab = b - a;
     let denom = ab.norm_squared();
