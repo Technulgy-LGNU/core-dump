@@ -18,6 +18,11 @@ impl<T: Num + Real + Copy + NumCast + Default> Vec2<T> {
   }
 
   #[inline]
+  pub fn det(&self, other: &Self) -> T {
+    self.x * other.x - self.y * other.y
+  }
+
+  #[inline]
   pub fn length(&self) -> T {
     self.dot(self).sqrt()
   }
