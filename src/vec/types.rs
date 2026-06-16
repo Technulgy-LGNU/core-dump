@@ -45,14 +45,6 @@ impl<T> Vec2<T> {
   }
 
   #[inline]
-  pub fn new_from_cp_vec2(v: CpVector2) -> Self
-  where
-    T: From<i32>,
-  {
-    Self::new(T::from(v.x), T::from(v.y))
-  }
-
-  #[inline]
   pub fn to_cp_vec2(self) -> CpVector2
   where
     T: NumCast + Copy,
@@ -61,6 +53,13 @@ impl<T> Vec2<T> {
       x: NumCast::from(self.x).unwrap_or_default(),
       y: NumCast::from(self.y).unwrap_or_default(),
     }
+  }
+}
+
+impl Vec2<f32> {
+  #[inline]
+  pub fn new_from_cp_vec2(v: CpVector2) -> Self {
+    Self::new(v.x as f32, v.y as f32)
   }
 }
 
