@@ -119,10 +119,7 @@ impl<T: Float + NumCast + Default + Copy> Vec2<T> {
   }
 }
 
-impl<T: Float + AddAssign + std::ops::SubAssign> Vec2<T>
-where
-  u16: From<T>,
-{
+impl<T: Float + AddAssign + std::ops::SubAssign> Vec2<T> {
   #[inline]
   pub fn angle_in_u16(self) -> u16 {
     let mut deg = self.y.atan2(self.x).to_degrees();
@@ -132,7 +129,8 @@ where
     while deg >= T::from(360).unwrap() {
       deg -= T::from(360).unwrap();
     }
-    T::into(deg.round())
+
+    deg.round().to_u16().unwrap()
   }
 
   #[inline]
