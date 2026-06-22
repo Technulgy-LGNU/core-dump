@@ -19,7 +19,7 @@ impl<T: Num + Real + Copy + NumCast + Default> Vec2<T> {
 
   #[inline]
   pub fn det(&self, other: &Self) -> T {
-    self.x * other.x - self.y * other.y
+    self.x * other.y - self.y * other.x
   }
 
   #[inline]
