@@ -14,4 +14,6 @@ message Robot_CP {
 
   optional bool acting = 7;
   optional uint32 last_rec_packet = 8;
+
+  required double timestamp = 9;
 }
