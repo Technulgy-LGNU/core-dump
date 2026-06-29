@@ -1,4 +1,4 @@
-use vec::types::Vec2;
+use crate::vec::types::Vec2;
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct BallState {
@@ -51,4 +51,15 @@ pub type Commands = [Option<RobotCommand>; 16];
 
 pub trait Ai {
   fn predict(&mut self, state: &GameState, dt: f32) -> Commands;
+}
+
+
+#[derive(Default)]
+pub struct DummyAi;
+
+
+impl Ai for DummyAi {
+    fn predict(&mut self, _state: &GameState, _dt: f32) -> Commands {
+        Commands::default()
+    }
 }
