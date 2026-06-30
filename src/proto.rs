@@ -5,7 +5,7 @@
 pub struct RobotId {
     /// the robot number
     #[prost(uint32, optional, tag="1")]
-    pub id: Option<u32>,
+    pub id:     Option<u32>,
     /// the team that the robot belongs to
     #[prost(enumeration="Team", optional, tag="2")]
     pub team: Option<i32>,
@@ -3030,7 +3030,7 @@ pub struct CpRobot {
     pub infos: CpInfos,
 }
 /// The commands as enums and the fields are for stuff like drive to position and kick
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CpCommand {
     #[prost(enumeration="CpState", required, tag="1")]
     pub state: i32,
@@ -3040,6 +3040,15 @@ pub struct CpCommand {
     pub pos: Option<CpVector2>,
     #[prost(uint32, optional, tag="4")]
     pub speed: Option<u32>,
+    /// use raw movement
+    #[prost(bool, optional, tag="9")]
+    pub raw: Option<bool>,
+    /// ???
+    #[prost(bool, optional, tag="10")]
+    pub inwall: Option<bool>,
+    /// robots to ignore with orca
+    #[prost(uint32, repeated, packed="false", tag="11")]
+    pub ignore_robots: Vec<u32>,
     #[prost(uint32, optional, tag="5")]
     pub orientation: Option<u32>,
     #[prost(uint32, optional, tag="6")]
@@ -3343,7 +3352,7 @@ pub struct InterfaceWrapperCp {
     pub interface_command: InterfaceCommandCp,
 }
 /// buf:lint:ignore MESSAGE_PASCAL_CASE
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InterfaceRobotCommandsCp {
     #[prost(uint32, required, tag="1")]
     pub robot_id: u32,
