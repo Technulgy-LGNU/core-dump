@@ -30,7 +30,9 @@ pub struct GameState {
 #[derive(Debug, Copy, Clone, Default, PartialEq)]
 pub enum RobotCommand {
   Pos(Vec2<f32>),
-  PosFace(Vec2<f32>, f32),
+  PosSpeed(Vec2<f32>, u32), //Pos, Speed
+  PosFace(Vec2<f32>, u32), //Pos, Face
+  PosFaceSpeed(Vec2<f32>, u32, u32), //Pos, Face, Speed
   Kick(f32),
   Chip(f32),
   RecKick(f32),
