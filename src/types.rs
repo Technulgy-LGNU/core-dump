@@ -54,6 +54,10 @@ pub type Commands = [Option<RobotCommand>; 16];
 
 pub trait Ai {
   fn predict(&mut self, state: &GameState, dt: f32) -> Commands;
+  
+  fn debug(&self) -> String {
+      String::new()
+  }
 }
 
 
