@@ -33,6 +33,7 @@ pub enum RobotCommand {
   PosSpeed(Vec2<f32>, u32), //Pos, Speed
   PosFace(Vec2<f32>, u32), //Pos, Face
   PosFaceSpeed(Vec2<f32>, u32, u32), //Pos, Face, Speed
+  WallPos(Vec2<f32>, u32), //Pos, Face, raw movement
   Kick(f32),
   Chip(f32),
   RecKick(f32),
