@@ -3429,4 +3429,353 @@ impl SslSource {
     }
   }
 }
+/// Movement limits for a robot
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct RobotLimits {
+    /// Max absolute speed-up acceleration \[m/s^2\]
+    #[prost(float, optional, tag="1")]
+    pub acc_speedup_absolute_max: Option<f32>,
+    /// Max angular speed-up acceleration \[rad/s^2\]
+    #[prost(float, optional, tag="2")]
+    pub acc_speedup_angular_max: Option<f32>,
+    /// Max absolute brake acceleration \[m/s^2\]
+    #[prost(float, optional, tag="3")]
+    pub acc_brake_absolute_max: Option<f32>,
+    /// Max angular brake acceleration \[rad/s^2\]
+    #[prost(float, optional, tag="4")]
+    pub acc_brake_angular_max: Option<f32>,
+    /// Max absolute velocity \[m/s\]
+    #[prost(float, optional, tag="5")]
+    pub vel_absolute_max: Option<f32>,
+    /// Max angular velocity \[rad/s\]
+    #[prost(float, optional, tag="6")]
+    pub vel_angular_max: Option<f32>,
+}
+/// Robot wheel angle configuration
+/// all angles are relative to looking forward,
+/// all wheels / angles are clockwise
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct RobotWheelAngles {
+    /// Angle front right \[rad\]
+    #[prost(float, required, tag="1")]
+    pub front_right: f32,
+    /// Angle back right \[rad\]
+    #[prost(float, required, tag="2")]
+    pub back_right: f32,
+    /// Angle back left \[rad\]
+    #[prost(float, required, tag="3")]
+    pub back_left: f32,
+    /// Angle front left \[rad\]
+    #[prost(float, required, tag="4")]
+    pub front_left: f32,
+}
+/// Specs of a robot
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RobotSpecs {
+    /// Id of the robot
+    #[prost(message, required, tag="1")]
+    pub id: RobotId,
+    /// Robot radius \[m\]
+    #[prost(float, optional, tag="2", default="0.09000000357627869")]
+    pub radius: Option<f32>,
+    /// Robot height \[m\]
+    #[prost(float, optional, tag="3", default="0.15000000596046448")]
+    pub height: Option<f32>,
+    /// Robot mass \[kg\]
+    #[prost(float, optional, tag="4")]
+    pub mass: Option<f32>,
+    /// Max linear kick speed \[m/s\] (unset = unlimited)
+    #[prost(float, optional, tag="7")]
+    pub max_linear_kick_speed: Option<f32>,
+    /// Max chip kick speed \[m/s\] (unset = unlimited)
+    #[prost(float, optional, tag="8")]
+    pub max_chip_kick_speed: Option<f32>,
+    /// Distance from robot center to dribbler \[m\] (implicitly defines the opening angle and dribbler width)
+    #[prost(float, optional, tag="9")]
+    pub center_to_dribbler: Option<f32>,
+    /// Movement limits
+    #[prost(message, optional, tag="10")]
+    pub limits: Option<RobotLimits>,
+    /// Wheel angle configuration
+    #[prost(message, optional, tag="13")]
+    pub wheel_angles: Option<RobotWheelAngles>,
+    /// Custom robot spec for specific simulators (the protobuf files are managed by the simulators)
+    #[prost(message, repeated, tag="14")]
+    pub custom: Vec<prost_types::Any>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RealismConfig {
+    /// Custom config for specific simulators (the protobuf files are managed by the simulators)
+    #[prost(message, repeated, tag="1")]
+    pub custom: Vec<prost_types::Any>,
+}
+/// Change the simulator configuration
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SimulatorConfig {
+    /// Update the geometry
+    #[prost(message, optional, tag="1")]
+    pub geometry: Option<SslGeometryData>,
+    /// Update the robot specs
+    #[prost(message, repeated, tag="2")]
+    pub robot_specs: Vec<RobotSpecs>,
+    /// Update realism configuration
+    #[prost(message, optional, tag="3")]
+    pub realism_config: Option<RealismConfig>,
+    /// Change the vision publish port
+    #[prost(uint32, optional, tag="4")]
+    pub vision_port: Option<u32>,
+}
+/// Errors in the simulator
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SimulatorError {
+    /// Unique code of the error for automatic handling on client side
+    #[prost(string, optional, tag="1")]
+    pub code: Option<String>,
+    /// Human readable description of the error
+    #[prost(string, optional, tag="2")]
+    pub message: Option<String>,
+}
+/// Teleport the ball to a new location and optionally set it to some velocity
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TeleportBall {
+    /// x-coordinate \[m\]
+    #[prost(float, optional, tag="1")]
+    pub x: Option<f32>,
+    /// y-coordinate \[m\]
+    #[prost(float, optional, tag="2")]
+    pub y: Option<f32>,
+    /// z-coordinate (height) \[m\]
+    #[prost(float, optional, tag="3")]
+    pub z: Option<f32>,
+    /// Velocity in x-direction \[m/s\]
+    #[prost(float, optional, tag="4")]
+    pub vx: Option<f32>,
+    /// Velocity in y-direction \[m/s\]
+    #[prost(float, optional, tag="5")]
+    pub vy: Option<f32>,
+    /// Velocity in z-direction \[m/s\]
+    #[prost(float, optional, tag="6")]
+    pub vz: Option<f32>,
+    /// Teleport the ball safely to the target, for example by
+    /// moving robots out of the way in case of collision and set speed of robots close-by to zero
+    #[prost(bool, optional, tag="7", default="false")]
+    pub teleport_safely: Option<bool>,
+    /// Adapt the angular ball velocity such that the ball is rolling
+    #[prost(bool, optional, tag="8", default="false")]
+    pub roll: Option<bool>,
+    /// Instead of teleporting the ball, apply some force to make sure
+    /// the ball reaches the required position soon (velocity is ignored if true)
+    /// WARNING: A command with by_force stays active (the move will take some time)
+    /// until cancled by another TeleportBall command with by_force = false.
+    /// To avoid teleporting the ball at the end and resetting its current spin,
+    /// do not set any of the optional fields in this message to end the force without triggering
+    /// an additional teleportation
+    #[prost(bool, optional, tag="9", default="false")]
+    pub by_force: Option<bool>,
+}
+/// Teleport a robot to some location and give it a velocity
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TeleportRobot {
+    /// Robot id to teleport
+    #[prost(message, required, tag="1")]
+    pub id: RobotId,
+    /// x-coordinate \[m\]
+    #[prost(float, optional, tag="2")]
+    pub x: Option<f32>,
+    /// y-coordinate \[m\]
+    #[prost(float, optional, tag="3")]
+    pub y: Option<f32>,
+    /// Orientation \[rad\], measured from the x-axis counter-clockwise
+    #[prost(float, optional, tag="4")]
+    pub orientation: Option<f32>,
+    /// Global velocity \[m/s\] towards x-axis
+    #[prost(float, optional, tag="5", default="0")]
+    pub v_x: Option<f32>,
+    /// Global velocity \[m/s\] towards y-axis
+    #[prost(float, optional, tag="6", default="0")]
+    pub v_y: Option<f32>,
+    /// Angular velocity \[rad/s\]
+    #[prost(float, optional, tag="7", default="0")]
+    pub v_angular: Option<f32>,
+    /// Robot should be present on the field?
+    /// true -> robot will be added, if it does not exist yet
+    /// false -> robot will be removed, if it is present
+    #[prost(bool, optional, tag="8")]
+    pub present: Option<bool>,
+    /// Instead of teleporting, apply some force to make sure
+    /// the robot reaches the required position soon (velocity is ignored if true)
+    /// WARNING: A command with by_force stays active (the move will take some time)
+    /// until cancled by another TeleportRobot command for the same bot with by_force = false.
+    /// To avoid teleporting at the end,
+    /// do not set any of the optional fields in this message
+    /// to end the force without triggering
+    /// an additional teleportation
+    #[prost(bool, optional, tag="9", default="false")]
+    pub by_force: Option<bool>,
+}
+/// Control the simulation
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SimulatorControl {
+    /// Teleport the ball
+    #[prost(message, optional, tag="1")]
+    pub teleport_ball: Option<TeleportBall>,
+    /// Teleport robots
+    #[prost(message, repeated, tag="2")]
+    pub teleport_robot: Vec<TeleportRobot>,
+    /// Change the simulation speed
+    #[prost(float, optional, tag="3")]
+    pub simulation_speed: Option<f32>,
+}
+/// Command from the connected client to the simulator
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SimulatorCommand {
+    /// Control the simulation
+    #[prost(message, optional, tag="1")]
+    pub control: Option<SimulatorControl>,
+    /// Configure the simulation
+    #[prost(message, optional, tag="2")]
+    pub config: Option<SimulatorConfig>,
+}
+/// Response of the simulator to the connected client
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SimulatorResponse {
+    /// List of errors, like using unsupported features
+    #[prost(message, repeated, tag="1")]
+    pub errors: Vec<SimulatorError>,
+}
+/// Full command for a single robot
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct RobotCommand {
+    /// Id of the robot
+    #[prost(uint32, required, tag="1")]
+    pub id: u32,
+    /// Movement command
+    #[prost(message, optional, tag="2")]
+    pub move_command: Option<RobotMoveCommand>,
+    /// Absolute (3 dimensional) kick speed \[m/s\]
+    #[prost(float, optional, tag="3")]
+    pub kick_speed: Option<f32>,
+    /// Kick angle \[degree\] (defaults to 0 degrees for a straight kick)
+    #[prost(float, optional, tag="4", default="0")]
+    pub kick_angle: Option<f32>,
+    /// Dribbler speed in rounds per minute \[rpm\]
+    #[prost(float, optional, tag="5")]
+    pub dribbler_speed: Option<f32>,
+}
+/// Wrapper for different kinds of movement commands
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct RobotMoveCommand {
+    #[prost(oneof="robot_move_command::Command", tags="1, 2, 3")]
+    pub command: Option<robot_move_command::Command>,
+}
+/// Nested message and enum types in `RobotMoveCommand`.
+pub mod robot_move_command {
+    #[derive(Clone, Copy, PartialEq, prost::Oneof)]
+    pub enum Command {
+        /// Move with wheel velocities
+        #[prost(message, tag="1")]
+        WheelVelocity(super::MoveWheelVelocity),
+        /// Move with local velocity
+        #[prost(message, tag="2")]
+        LocalVelocity(super::MoveLocalVelocity),
+        /// Move with global velocity
+        #[prost(message, tag="3")]
+        GlobalVelocity(super::MoveGlobalVelocity),
+    }
+}
+/// Move robot with wheel velocities
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct MoveWheelVelocity {
+    /// Velocity \[m/s\] of front right wheel
+    #[prost(float, required, tag="1")]
+    pub front_right: f32,
+    /// Velocity \[m/s\] of back right wheel
+    #[prost(float, required, tag="2")]
+    pub back_right: f32,
+    /// Velocity \[m/s\] of back left wheel
+    #[prost(float, required, tag="3")]
+    pub back_left: f32,
+    /// Velocity \[m/s\] of front left wheel
+    #[prost(float, required, tag="4")]
+    pub front_left: f32,
+}
+/// Move robot with local velocity
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct MoveLocalVelocity {
+    /// Velocity forward \[m/s\] (towards the dribbler)
+    #[prost(float, required, tag="1")]
+    pub forward: f32,
+    /// Velocity to the left \[m/s\]
+    #[prost(float, required, tag="2")]
+    pub left: f32,
+    /// Angular velocity counter-clockwise \[rad/s\]
+    #[prost(float, required, tag="3")]
+    pub angular: f32,
+}
+/// Move robot with global velocity
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct MoveGlobalVelocity {
+    /// Velocity on x-axis of the field \[m/s\]
+    #[prost(float, required, tag="1")]
+    pub x: f32,
+    /// Velocity on y-axis of the field \[m/s\]
+    #[prost(float, required, tag="2")]
+    pub y: f32,
+    /// Angular velocity counter-clockwise \[rad/s\]
+    #[prost(float, required, tag="3")]
+    pub angular: f32,
+}
+/// Command from the connected client to the simulator
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RobotControl {
+    /// Control the robots
+    #[prost(message, repeated, tag="1")]
+    pub robot_commands: Vec<RobotCommand>,
+}
+/// Feedback from a robot
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RobotFeedback {
+    /// Id of the robot
+    #[prost(uint32, required, tag="1")]
+    pub id: u32,
+    /// Has the dribbler contact to the ball right now
+    #[prost(bool, optional, tag="2")]
+    pub dribbler_ball_contact: Option<bool>,
+    /// Custom robot feedback for specific simulators (the protobuf files are managed by the simulators)
+    #[prost(message, optional, tag="3")]
+    pub custom: Option<prost_types::Any>,
+}
+/// Response to RobotControl from the simulator to the connected client
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RobotControlResponse {
+    /// List of errors, like using unsupported features
+    #[prost(message, repeated, tag="1")]
+    pub errors: Vec<SimulatorError>,
+    /// Feedback of the robots
+    #[prost(message, repeated, tag="2")]
+    pub feedback: Vec<RobotFeedback>,
+}
+/// Request from the team to the simulator
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SimulationSyncRequest {
+    /// The simulation step \[s\] to perform
+    #[prost(float, optional, tag="1")]
+    pub sim_step: Option<f32>,
+    /// An optional simulator command
+    #[prost(message, optional, tag="2")]
+    pub simulator_command: Option<SimulatorCommand>,
+    /// An optional robot control command
+    #[prost(message, optional, tag="3")]
+    pub robot_control: Option<RobotControl>,
+}
+/// Response to last SimulationSyncRequest
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SimulationSyncResponse {
+    /// List of detection frames for all cameras with the state after the simulation step in the request was performed
+    #[prost(message, repeated, tag="1")]
+    pub detection: Vec<SslDetectionFrame>,
+    /// An optional robot control response
+    #[prost(message, optional, tag="2")]
+    pub robot_control_response: Option<RobotControlResponse>,
+}
 // @@protoc_insertion_point(module)
