@@ -5,7 +5,7 @@
 pub struct RobotId {
     /// the robot number
     #[prost(uint32, optional, tag="1")]
-    pub id:     Option<u32>,
+    pub id: Option<u32>,
     /// the team that the robot belongs to
     #[prost(enumeration="Team", optional, tag="2")]
     pub team: Option<i32>,
@@ -3370,6 +3370,12 @@ pub struct InterfaceCommandCp {
     pub game: InterfaceGameCp,
     #[prost(message, required, tag="4")]
     pub test: InterfaceTestCp,
+    /// Set the side. false for x+, true for x-
+    #[prost(bool, required, tag="5")]
+    pub side: bool,
+    /// Set the team color. False for Yellow, true for Blue
+    #[prost(bool, required, tag="6")]
+    pub team_color: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InterfaceManualCp {
@@ -3392,12 +3398,6 @@ pub struct InterfaceGameCp {
     /// Start or Stop
     #[prost(bool, required, tag="1")]
     pub running: bool,
-    /// Set the side. false for x+, true for x-
-    #[prost(bool, required, tag="2")]
-    pub side: bool,
-    /// Set the team color. False for Yellow, true for Blue
-    #[prost(bool, required, tag="3")]
-    pub team_color: bool,
     /// Set the robot, that should be goalkeeper
     #[prost(uint32, required, tag="4")]
     pub goalkeeper_id: u32,
