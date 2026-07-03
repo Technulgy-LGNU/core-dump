@@ -5,7 +5,7 @@
 pub struct RobotId {
     /// the robot number
     #[prost(uint32, optional, tag="1")]
-    pub id:     Option<u32>,
+    pub id: Option<u32>,
     /// the team that the robot belongs to
     #[prost(enumeration="Team", optional, tag="2")]
     pub team: Option<i32>,
@@ -2969,543 +2969,6 @@ pub struct CiOutput {
     #[prost(message, optional, tag="1")]
     pub referee_msg: Option<Referee>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct CpBall {
-    /// The position \[mm\] in the ssl-vision coordinate system
-    #[prost(message, required, tag="1")]
-    pub pos: CpVector2,
-    /// The velocity \[mm/s\] in the ssl-vision coordinate system
-    #[prost(message, optional, tag="2")]
-    pub vel: Option<CpVector2>,
-}
-/// From the tracked ssl vision packet, removed unnecessary fields
-/// A single tracked robot
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct CpTrackedRobot {
-    #[prost(uint32, required, tag="1")]
-    pub robot_id: u32,
-    /// The position \[mm\] in the ssl-vision coordinate system
-    #[prost(message, required, tag="2")]
-    pub pos: CpVector2,
-    /// The orientation \[degree\] in the ssl-vision coordinate system
-    #[prost(int32, required, tag="3")]
-    pub orientation: i32,
-    /// The velocity \[m/s\] in the ssl-vision coordinate system
-    #[prost(message, optional, tag="4")]
-    pub vel: Option<CpVector2>,
-    /// The visibility, 0 means not visible, 255 means fully visible, the rest is in between
-    #[prost(uint32, required, tag="5")]
-    pub visibility: u32,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct CpVector2 {
-    #[prost(int32, required, tag="1")]
-    pub x: i32,
-    #[prost(int32, required, tag="2")]
-    pub y: i32,
-}
-/// The message from the crash pilot to the robot
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CpRobot {
-    /// Some fields to check stuff, drop all packets that are really late (for now 400ms) and the packet id should also be newer than the last one
-    #[prost(uint32, required, tag="1")]
-    pub robot_id: u32,
-    #[prost(double, required, tag="2")]
-    pub timestamp: f64,
-    #[prost(uint32, required, tag="3")]
-    pub packet_id: u32,
-    /// the ball data,
-    #[prost(message, required, tag="4")]
-    pub ball: CpBall,
-    /// The robots, the robot can extract their own position easily, because you should now your own robot id.
-    #[prost(message, repeated, tag="5")]
-    pub robots_yellow: Vec<CpTrackedRobot>,
-    #[prost(message, repeated, tag="6")]
-    pub robots_blue: Vec<CpTrackedRobot>,
-    /// The actual command
-    #[prost(message, required, tag="7")]
-    pub cmd: CpCommand,
-    /// Info about the current game, including team, field setup etc
-    #[prost(message, required, tag="8")]
-    pub infos: CpInfos,
-}
-/// The commands as enums and the fields are for stuff like drive to position and kick
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct CpCommand {
-    #[prost(enumeration="CpState", required, tag="1")]
-    pub state: i32,
-    #[prost(enumeration="CpTask", required, tag="2")]
-    pub task: i32,
-    #[prost(message, optional, tag="3")]
-    pub pos: Option<CpVector2>,
-    #[prost(uint32, optional, tag="4")]
-    pub speed: Option<u32>,
-    /// use raw movement
-    #[prost(bool, optional, tag="9")]
-    pub raw: Option<bool>,
-    /// ???
-    #[prost(bool, optional, tag="10")]
-    pub inwall: Option<bool>,
-    /// robots to ignore with orca
-    #[prost(uint32, repeated, packed="false", tag="11")]
-    pub ignore_robots: Vec<u32>,
-    #[prost(uint32, optional, tag="5")]
-    pub orientation: Option<u32>,
-    #[prost(uint32, optional, tag="6")]
-    pub kick_orient: Option<u32>,
-    #[prost(uint32, optional, tag="7")]
-    pub kick_speed: Option<u32>,
-    #[prost(uint32, optional, tag="8")]
-    pub enemy_id: Option<u32>,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct CpInfos {
-    /// false for yellow and true for blue
-    #[prost(bool, required, tag="1")]
-    pub team_color: bool,
-    /// Our defensive site
-    /// false for x+ and true for x-
-    #[prost(bool, required, tag="2")]
-    pub team_site: bool,
-    /// General field info, used for orca
-    /// Everything is in mm
-    #[prost(uint32, required, tag="3")]
-    pub width: u32,
-    #[prost(uint32, required, tag="4")]
-    pub height: u32,
-    #[prost(uint32, required, tag="5")]
-    pub runoff_width: u32,
-    #[prost(uint32, required, tag="6")]
-    pub penalty_area_width: u32,
-    #[prost(uint32, required, tag="7")]
-    pub penalty_area_height: u32,
-    #[prost(uint32, required, tag="8")]
-    pub goal_width: u32,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
-#[repr(i32)]
-pub enum CpState {
-    StateUnspecified = 0,
-    /// The GameController Halt Command
-    /// Robot is not allowed to move
-    StateHalt = 1,
-    /// The GameController Stop Command
-    /// Max velocity is 1.5m/s and distance to the ball should be 0.5m
-    StateStop = 2,
-    /// Should listen to CP_Task Commands
-    StateFree = 3,
-    /// This robot is the goalie, only listens to the GC_Task::Kick commands, to receive and kick the ball.
-    StateGoalie = 4,
-    /// Drive to the substitution area and turn all motors  off (we need to define the exact position for each robot at the start, so they don't touch
-    /// when we call all our robots back)
-    StateSubstitute = 5,
-}
-impl CpState {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::StateUnspecified => "STATE_UNSPECIFIED",
-            Self::StateHalt => "STATE_HALT",
-            Self::StateStop => "STATE_STOP",
-            Self::StateFree => "STATE_FREE",
-            Self::StateGoalie => "STATE_GOALIE",
-            Self::StateSubstitute => "STATE_SUBSTITUTE",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> Option<Self> {
-        match value {
-            "STATE_UNSPECIFIED" => Some(Self::StateUnspecified),
-            "STATE_HALT" => Some(Self::StateHalt),
-            "STATE_STOP" => Some(Self::StateStop),
-            "STATE_FREE" => Some(Self::StateFree),
-            "STATE_GOALIE" => Some(Self::StateGoalie),
-            "STATE_SUBSTITUTE" => Some(Self::StateSubstitute),
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
-#[repr(i32)]
-pub enum CpTask {
-    TaskUnspecified = 0,
-    /// Drive to that position, if CP_State::STOP, max velocity is 1.5m/s
-    TaskPos = 1,
-    /// Kick the ball in the CP_Command::kick_orient direction
-    TaskKick = 2,
-    /// Chip the ball in the CP_Command::kick_orient direction
-    TaskChip = 3,
-    /// Receive the ball from the CP_Command::kick_orient direction
-    TaskRecKick = 4,
-    /// Try to steal the ball from another robot.
-    /// This is to steal the ball from the ball capturing zone, the CrashPilot will try to position robots accordingly to intercept balls
-    TaskSteal = 5,
-    /// Dribble the ball to the CP_Command::pos position
-    TaskDribble = 6,
-    /// Get the ball and move it to the CP_Command::pos position
-    TaskPosBall = 7,
-    /// Moves the robot between the ball and an enemy, defined with the CP_Command::enemy_id value
-    /// If CP_Command::enemy_id is None, then it should block the goal
-    TaskBlock = 8,
-    /// This robot should do a kickoff, basically kick the ball in the CP_Command::kick_orient direction, but adhere to the kickoff rules
-    StateKickoff = 9,
-    /// Free Kick, use the CP_Command::kick_orientation direction
-    StateFreekick = 11,
-}
-impl CpTask {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::TaskUnspecified => "TASK_UNSPECIFIED",
-            Self::TaskPos => "TASK_POS",
-            Self::TaskKick => "TASK_KICK",
-            Self::TaskChip => "TASK_CHIP",
-            Self::TaskRecKick => "TASK_REC_KICK",
-            Self::TaskSteal => "TASK_STEAL",
-            Self::TaskDribble => "TASK_DRIBBLE",
-            Self::TaskPosBall => "TASK_PosBall",
-            Self::TaskBlock => "TASK_BLOCK",
-            Self::StateKickoff => "STATE_KICKOFF",
-            Self::StateFreekick => "STATE_FREEKICK",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> Option<Self> {
-        match value {
-            "TASK_UNSPECIFIED" => Some(Self::TaskUnspecified),
-            "TASK_POS" => Some(Self::TaskPos),
-            "TASK_KICK" => Some(Self::TaskKick),
-            "TASK_CHIP" => Some(Self::TaskChip),
-            "TASK_REC_KICK" => Some(Self::TaskRecKick),
-            "TASK_STEAL" => Some(Self::TaskSteal),
-            "TASK_DRIBBLE" => Some(Self::TaskDribble),
-            "TASK_PosBall" => Some(Self::TaskPosBall),
-            "TASK_BLOCK" => Some(Self::TaskBlock),
-            "STATE_KICKOFF" => Some(Self::StateKickoff),
-            "STATE_FREEKICK" => Some(Self::StateFreekick),
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SslWrapperPacket {
-    #[prost(message, optional, tag="1")]
-    pub detection: Option<SslDetectionFrame>,
-    #[prost(message, optional, tag="2")]
-    pub geometry: Option<SslGeometryData>,
-    #[prost(enumeration="SslSource", optional, tag="3")]
-    pub source: Option<i32>,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
-#[repr(i32)]
-pub enum SslSource {
-    Unknown = 0,
-    Other = 1,
-    SslVision = 2,
-    VisionProcessor = 3,
-    Grsim = 4,
-    ErforceSim = 5,
-}
-impl SslSource {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unknown => "SSL_SOURCE_UNKNOWN",
-            Self::Other => "SSL_SOURCE_OTHER",
-            Self::SslVision => "SSL_SOURCE_SSL_VISION",
-            Self::VisionProcessor => "SSL_SOURCE_VISION_PROCESSOR",
-            Self::Grsim => "SSL_SOURCE_GRSIM",
-            Self::ErforceSim => "SSL_SOURCE_ERFORCE_SIM",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> Option<Self> {
-        match value {
-            "SSL_SOURCE_UNKNOWN" => Some(Self::Unknown),
-            "SSL_SOURCE_OTHER" => Some(Self::Other),
-            "SSL_SOURCE_SSL_VISION" => Some(Self::SslVision),
-            "SSL_SOURCE_VISION_PROCESSOR" => Some(Self::VisionProcessor),
-            "SSL_SOURCE_GRSIM" => Some(Self::Grsim),
-            "SSL_SOURCE_ERFORCE_SIM" => Some(Self::ErforceSim),
-            _ => None,
-        }
-    }
-}
-/// buf:lint:ignore MESSAGE_PASCAL_CASE
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CpInterfaceWrapper {
-    #[prost(message, optional, tag="1")]
-    pub vision_raw: Option<SslWrapperPacket>,
-    #[prost(message, optional, tag="2")]
-    pub vision_tracked: Option<TrackerWrapperPacket>,
-    #[prost(message, optional, tag="3")]
-    pub gc_data: Option<Referee>,
-    #[prost(message, repeated, tag="4")]
-    pub robot_commands: Vec<CpRobot>,
-    #[prost(message, optional, tag="5")]
-    pub cp_gamephase: Option<CpGamePhase>,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct CpGamePhase {
-    #[prost(enumeration="cp_game_phase::GamePhase", optional, tag="1")]
-    pub game_phase: Option<i32>,
-    #[prost(enumeration="cp_game_phase::PrepPhase", optional, tag="2")]
-    pub prep_phase: Option<i32>,
-}
-/// Nested message and enum types in `CP_GamePhase`.
-pub mod cp_game_phase {
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
-    #[repr(i32)]
-    pub enum GamePhase {
-        UnknownGamePhase = 0,
-        Halted = 1,
-        Stopped = 2,
-        Running = 3,
-        Timeout = 4,
-        BallPlacement = 5,
-    }
-    impl GamePhase {
-        /// String value of the enum field names used in the ProtoBuf definition.
-        ///
-        /// The values are not transformed in any way and thus are considered stable
-        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-        pub fn as_str_name(&self) -> &'static str {
-            match self {
-                Self::UnknownGamePhase => "UNKNOWN_GamePhase",
-                Self::Halted => "Halted",
-                Self::Stopped => "Stopped",
-                Self::Running => "Running",
-                Self::Timeout => "Timeout",
-                Self::BallPlacement => "BallPlacement",
-            }
-        }
-        /// Creates an enum from field names used in the ProtoBuf definition.
-        pub fn from_str_name(value: &str) -> Option<Self> {
-            match value {
-                "UNKNOWN_GamePhase" => Some(Self::UnknownGamePhase),
-                "Halted" => Some(Self::Halted),
-                "Stopped" => Some(Self::Stopped),
-                "Running" => Some(Self::Running),
-                "Timeout" => Some(Self::Timeout),
-                "BallPlacement" => Some(Self::BallPlacement),
-                _ => None,
-            }
-        }
-    }
-    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
-    #[repr(i32)]
-    pub enum PrepPhase {
-        UnknownPrepPhase = 0,
-        OffensiveKickoff = 1,
-        DefensiveKickoff = 2,
-        OffensivePenalty = 3,
-        DefensivePenalty = 4,
-        OffensiveFreeKick = 5,
-        DefensiveFreeKick = 6,
-    }
-    impl PrepPhase {
-        /// String value of the enum field names used in the ProtoBuf definition.
-        ///
-        /// The values are not transformed in any way and thus are considered stable
-        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-        pub fn as_str_name(&self) -> &'static str {
-            match self {
-                Self::UnknownPrepPhase => "UNKNOWN_PrepPhase",
-                Self::OffensiveKickoff => "OffensiveKickoff",
-                Self::DefensiveKickoff => "DefensiveKickoff",
-                Self::OffensivePenalty => "OffensivePenalty",
-                Self::DefensivePenalty => "DefensivePenalty",
-                Self::OffensiveFreeKick => "OffensiveFreeKick",
-                Self::DefensiveFreeKick => "DefensiveFreeKick",
-            }
-        }
-        /// Creates an enum from field names used in the ProtoBuf definition.
-        pub fn from_str_name(value: &str) -> Option<Self> {
-            match value {
-                "UNKNOWN_PrepPhase" => Some(Self::UnknownPrepPhase),
-                "OffensiveKickoff" => Some(Self::OffensiveKickoff),
-                "DefensiveKickoff" => Some(Self::DefensiveKickoff),
-                "OffensivePenalty" => Some(Self::OffensivePenalty),
-                "DefensivePenalty" => Some(Self::DefensivePenalty),
-                "OffensiveFreeKick" => Some(Self::OffensiveFreeKick),
-                "DefensiveFreeKick" => Some(Self::DefensiveFreeKick),
-                _ => None,
-            }
-        }
-    }
-}
-/// buf:lint:ignore MESSAGE_PASCAL_CASE
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InterfaceWrapperCp {
-    #[prost(message, repeated, tag="1")]
-    pub robot_commands: Vec<InterfaceRobotCommandsCp>,
-    #[prost(message, required, tag="2")]
-    pub interface_command: InterfaceCommandCp,
-}
-/// buf:lint:ignore MESSAGE_PASCAL_CASE
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct InterfaceRobotCommandsCp {
-    #[prost(uint32, required, tag="1")]
-    pub robot_id: u32,
-    #[prost(message, required, tag="2")]
-    pub command: CpCommand,
-}
-/// buf:lint:ignore MESSAGE_PASCAL_CASE
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct InterfaceCommandCp {
-    #[prost(enumeration="CpMode", required, tag="1")]
-    pub mode: i32,
-    #[prost(message, required, tag="2")]
-    pub manual: InterfaceManualCp,
-    #[prost(message, required, tag="3")]
-    pub game: InterfaceGameCp,
-    #[prost(message, required, tag="4")]
-    pub test: InterfaceTestCp,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct InterfaceManualCp {
-    /// You can decide which quadrant the robot should use to test
-    /// 0: -x +y || 1: +x +y || 2: +x -y || 3: -x -y
-    #[prost(bool, required, tag="1")]
-    pub enable_testfield: bool,
-    #[prost(uint32, required, tag="2")]
-    pub testfield: u32,
-    /// You can tell CP to use the raw ball data with a simple consistency filter
-    /// The tracked vision doesn't work that good with multiple balls, so for testing we can switch to the raw vision
-    #[prost(bool, required, tag="3")]
-    pub ball_tracked: bool,
-    /// Enable listening to the game controller data, for testing you can switch it off to test the behaviour without the game controller data
-    #[prost(bool, required, tag="4")]
-    pub gc_data: bool,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct InterfaceGameCp {
-    /// Start or Stop
-    #[prost(bool, required, tag="1")]
-    pub running: bool,
-    /// Set the side. false for x+, true for x-
-    #[prost(bool, required, tag="2")]
-    pub side: bool,
-    /// Set the team color. False for Yellow, true for Blue
-    #[prost(bool, required, tag="3")]
-    pub team_color: bool,
-    /// Set the robot, that should be goalkeeper
-    #[prost(uint32, required, tag="4")]
-    pub goalkeeper_id: u32,
-    /// Set the max speed for the game in mm/s, 0 for unlimited
-    #[prost(uint32, required, tag="5")]
-    pub max_speed: u32,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct InterfaceTestCp {
-    /// Set the test, that should be executed
-    #[prost(enumeration="CpTests", required, tag="2")]
-    pub test: i32,
-    /// Select the robots, that should be used for the test
-    #[prost(uint32, repeated, packed="false", tag="3")]
-    pub robot_ids: Vec<u32>,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
-#[repr(i32)]
-pub enum CpTests {
-    TestNone = 0,
-    TestBallControl = 1,
-    TestDribbler = 2,
-    TestKicker = 3,
-    ModeGoalShoot = 4,
-    ModeGoalie = 5,
-    ModeGoalieAndShoot = 6,
-}
-impl CpTests {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::TestNone => "TEST_NONE",
-            Self::TestBallControl => "TEST_BALL_CONTROL",
-            Self::TestDribbler => "TEST_DRIBBLER",
-            Self::TestKicker => "TEST_KICKER",
-            Self::ModeGoalShoot => "MODE_GOAL_SHOOT",
-            Self::ModeGoalie => "MODE_GOALIE",
-            Self::ModeGoalieAndShoot => "MODE_GOALIE_AND_SHOOT",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> Option<Self> {
-        match value {
-            "TEST_NONE" => Some(Self::TestNone),
-            "TEST_BALL_CONTROL" => Some(Self::TestBallControl),
-            "TEST_DRIBBLER" => Some(Self::TestDribbler),
-            "TEST_KICKER" => Some(Self::TestKicker),
-            "MODE_GOAL_SHOOT" => Some(Self::ModeGoalShoot),
-            "MODE_GOALIE" => Some(Self::ModeGoalie),
-            "MODE_GOALIE_AND_SHOOT" => Some(Self::ModeGoalieAndShoot),
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
-#[repr(i32)]
-pub enum CpMode {
-    ModeManual = 0,
-    ModeGame = 1,
-    ModeTest = 2,
-}
-impl CpMode {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::ModeManual => "MODE_MANUAL",
-            Self::ModeGame => "MODE_GAME",
-            Self::ModeTest => "MODE_TEST",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> Option<Self> {
-        match value {
-            "MODE_MANUAL" => Some(Self::ModeManual),
-            "MODE_GAME" => Some(Self::ModeGame),
-            "MODE_TEST" => Some(Self::ModeTest),
-            _ => None,
-        }
-    }
-}
-/// The packet the robot should send back
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct RobotCp {
-    #[prost(uint32, required, tag="1")]
-    pub robot_id: u32,
-    #[prost(uint32, optional, tag="2")]
-    pub battery_voltage: Option<u32>,
-    #[prost(uint32, optional, tag="3")]
-    pub current: Option<u32>,
-    #[prost(bool, required, tag="4")]
-    pub kicker_ready: bool,
-    #[prost(bool, required, tag="5")]
-    pub has_ball: bool,
-    #[prost(bool, optional, tag="6")]
-    pub has_error: Option<bool>,
-    #[prost(bool, optional, tag="7")]
-    pub acting: Option<bool>,
-    #[prost(uint32, optional, tag="8")]
-    pub last_rec_packet: Option<u32>,
-    #[prost(double, required, tag="9")]
-    pub timestamp: f64,
-}
 /// a reply that is sent by the controller for each request from teams or autoRefs
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ControllerReply {
@@ -3899,6 +3362,53 @@ impl AdvantageChoice {
         match value {
             "STOP" => Some(Self::Stop),
             "CONTINUE" => Some(Self::Continue),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SslWrapperPacket {
+    #[prost(message, optional, tag="1")]
+    pub detection: Option<SslDetectionFrame>,
+    #[prost(message, optional, tag="2")]
+    pub geometry: Option<SslGeometryData>,
+    #[prost(enumeration="SslSource", optional, tag="3")]
+    pub source: Option<i32>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, prost::Enumeration)]
+#[repr(i32)]
+pub enum SslSource {
+    Unknown = 0,
+    Other = 1,
+    SslVision = 2,
+    VisionProcessor = 3,
+    Grsim = 4,
+    ErforceSim = 5,
+}
+impl SslSource {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unknown => "SSL_SOURCE_UNKNOWN",
+            Self::Other => "SSL_SOURCE_OTHER",
+            Self::SslVision => "SSL_SOURCE_SSL_VISION",
+            Self::VisionProcessor => "SSL_SOURCE_VISION_PROCESSOR",
+            Self::Grsim => "SSL_SOURCE_GRSIM",
+            Self::ErforceSim => "SSL_SOURCE_ERFORCE_SIM",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> Option<Self> {
+        match value {
+            "SSL_SOURCE_UNKNOWN" => Some(Self::Unknown),
+            "SSL_SOURCE_OTHER" => Some(Self::Other),
+            "SSL_SOURCE_SSL_VISION" => Some(Self::SslVision),
+            "SSL_SOURCE_VISION_PROCESSOR" => Some(Self::VisionProcessor),
+            "SSL_SOURCE_GRSIM" => Some(Self::Grsim),
+            "SSL_SOURCE_ERFORCE_SIM" => Some(Self::ErforceSim),
             _ => None,
         }
     }
