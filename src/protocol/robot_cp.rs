@@ -12,7 +12,6 @@ pub struct RobotCp {
   ///   - Bit 2: Robot Enabled
   ///   - Bit 3: Kicker Ready
   ///   - Bit 4: Has Ball
-  ///   - Bit 5: Error
   ///
   /// rest for other stuff
   pub flags: u32,
@@ -68,8 +67,12 @@ impl RobotCp {
   pub fn decode(data: Vec<u8>) -> RobotCp {
     RobotCp {
       robot_id: data[0],
-      timestamp: u64::from_le_bytes([data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]]),
-      cp_timestamp: u64::from_le_bytes([data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16]]),
+      timestamp: u64::from_le_bytes([
+        data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8],
+      ]),
+      cp_timestamp: u64::from_le_bytes([
+        data[9], data[10], data[11], data[12], data[13], data[14], data[15], data[16],
+      ]),
       flags: u32::from_le_bytes([data[17], data[18], data[19], data[20]]),
       voltage: u32::from_le_bytes([data[21], data[22], data[23], data[24]]),
       kick_voltage: u32::from_le_bytes([data[25], data[26], data[27], data[28]]),
@@ -77,7 +80,28 @@ impl RobotCp {
       cm5_temp: u32::from_le_bytes([data[33], data[34], data[35], data[36]]),
       control_board_temp: u32::from_le_bytes([data[37], data[38], data[39], data[40]]),
       kick_temp: u32::from_le_bytes([data[41], data[42], data[43], data[44]]),
-      esc_temps: data[45..].chunks(4).map(|chunk| u32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]])).collect(),
+      esc_temps: data[45..]
+        .chunks(4)
+        .map(|chunk| u32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]))
+        .collect(),
     }
+  }
+
+  // Flag checks
+  #[inline]
+  pub fn robot_read(&self) -> bool {
+    self.flags & (1 << 0) != 0
+  }
+  #[inline]
+  pub fn robot_enabled(&self) -> bool {
+    self.flags & (1 << 1) != 0
+  }
+  #[inline]
+  pub fn kicker_ready(&self) -> bool {
+    self.flags & (1 << 2) != 0
+  }
+  #[inline]
+  pub fn has_ball(&self) -> bool {
+    self.flags & (1 << 3) != 0
   }
 }
