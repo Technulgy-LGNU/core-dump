@@ -1,4 +1,4 @@
-use crate::proto::{CpVector2, Vector2};
+use crate::proto::{Vector2, Vector3};
 use num_traits::{NumCast, Zero};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -29,37 +29,25 @@ impl<T> Vec2<T> {
   }
 
   #[inline]
-  fn from_tuple(tuple: (T, T)) -> Self {
-    Self {
-      x: tuple.0,
-      y: tuple.1,
-    }
-  }
-
-  #[inline]
-  pub fn new_from_cp(v: Vector2) -> Self
-  where
-    T: From<f32>,
-  {
-    Self::new(T::from(v.x), T::from(v.y))
-  }
-
-  #[inline]
-  pub fn to_cp_vec2(self) -> CpVector2
+  pub fn new_from_ssl_vec2(v: Vector2) -> Vec2<T>
   where
     T: NumCast + Copy,
   {
-    CpVector2 {
-      x: NumCast::from(self.x).unwrap_or_default(),
-      y: NumCast::from(self.y).unwrap_or_default(),
+    Vec2 {
+      x: NumCast::from(v.x).unwrap(),
+      y: NumCast::from(v.y).unwrap(),
     }
   }
-}
 
-impl Vec2<f32> {
   #[inline]
-  pub fn new_from_cp_vec2(v: CpVector2) -> Self {
-    Self::new(v.x as f32, v.y as f32)
+  pub fn new_from_ssl_vec3(v: Vector3) -> Vec2<T>
+  where
+    T: NumCast + Copy,
+  {
+    Vec2 {
+      x: NumCast::from(v.x).unwrap(),
+      y: NumCast::from(v.y).unwrap(),
+    }
   }
 }
 
