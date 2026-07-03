@@ -4,6 +4,8 @@ use crate::vec::types::Vec2;
 /// Internal use generic robot
 pub struct Robot {
   pub robot_id: u8,
+  /// 0 = Unknown, 1 = Yellow, 2 = Blue
+  pub team: u8,
 
   pub pos: Vec2<f32>,
   pub vel: Option<Vec2<f32>>,
@@ -18,6 +20,7 @@ impl Default for Robot {
   fn default() -> Robot {
     Robot {
       robot_id: 0,
+      team: 0,
       pos: Vec2::new(0.0, 0.0),
       vel: None,
       orientation: 0.0,
@@ -37,9 +40,14 @@ impl Robot {
       if let Some(id) = robot.robot_id.id {
         let r = Robot {
           robot_id: id as u8,
-          pos: Vec2::new_from_cp(robot.pos),
+          team: if let Some(team) = robot.robot_id.team {
+            team as u8
+          } else {
+            0
+          },
+          pos: Vec2::new_from_ssl_vec2(robot.pos),
           vel: if let Some(vel) = robot.vel {
-            Some(Vec2::new_from_cp(vel))
+            Some(Vec2::new_from_ssl_vec2(vel))
           } else {
             None
           },
@@ -88,11 +96,11 @@ impl Ball {
     tracked: &Vec<TrackedBall>,
     raw_or_tracked: bool,
     test_field: Option<u8>,
-  ) -> Ball {
+  ) -> Option<Ball> {
     match raw_or_tracked {
       false => {
         if raw.is_empty() {
-          return Ball::default();
+          return None;
         }
         // Raw
         match test_field {
@@ -108,9 +116,9 @@ impl Ball {
                 .collect();
 
               if balls.is_empty() {
-                Ball::default();
+                return None;
               }
-              balls[0]
+              Some(balls[0])
             }
             1 => {
               let balls: Vec<Ball> = raw
@@ -123,26 +131,26 @@ impl Ball {
                 .collect();
 
               if balls.is_empty() {
-                Ball::default();
+                return None;
               }
-              balls[0]
+              Some(balls[0])
             }
             _ => {
               println!("Wrong Test Mode: 0 = X+, 1 = X-");
-              Ball::default()
+              None
             }
           },
-          None => Ball {
+          None => Some(Ball {
             pos: Vec2::new(raw[0].x, raw[0].y),
             vel: Default::default(),
-          },
+          }),
         }
       }
       true => {
         // Tracked
 
         if tracked.is_empty() {
-          return Ball::default();
+          return None;
         }
         match test_field {
           Some(test_field) => match test_field {
@@ -151,9 +159,9 @@ impl Ball {
                 .iter()
                 .filter(|ball| ball.pos.x.is_sign_positive())
                 .map(|ball| Ball {
-                  pos: Vec2::new(ball.pos.x, ball.pos.y),
+                  pos: Vec2::new_from_ssl_vec3(ball.pos),
                   vel: if let Some(vel) = ball.vel {
-                    Some(Vec2::new(vel.x, vel.y))
+                    Some(Vec2::new_from_ssl_vec3(vel))
                   } else {
                     None
                   },
@@ -161,18 +169,18 @@ impl Ball {
                 .collect();
 
               if balls.is_empty() {
-                Ball::default();
+                return None;
               }
-              balls[0]
+              Some(balls[0])
             }
             1 => {
               let balls: Vec<Ball> = tracked
                 .iter()
                 .filter(|ball| ball.pos.x.is_sign_negative())
                 .map(|ball| Ball {
-                  pos: Vec2::new(ball.pos.x, ball.pos.y),
+                  pos: Vec2::new_from_ssl_vec3(ball.pos),
                   vel: if let Some(vel) = ball.vel {
-                    Some(Vec2::new(vel.x, vel.y))
+                    Some(Vec2::new_from_ssl_vec3(vel))
                   } else {
                     None
                   },
@@ -180,22 +188,19 @@ impl Ball {
                 .collect();
 
               if balls.is_empty() {
-                Ball::default();
+                return None
               }
-              balls[0]
+              Some(balls[0])
             }
             _ => {
               println!("Wrong Test Mode: 0 = X+, 1 = X-");
-              Ball::default()
+              None
             }
           },
-          None => Ball {
-            pos: Vec2::new(tracked[0].pos.x, tracked[0].pos.y),
-            vel: Option::from(Vec2::new(
-              tracked[0].vel.unwrap_or_default().x,
-              tracked[0].vel.unwrap_or_default().y,
-            )),
-          },
+          None => Some(Ball {
+            pos: Vec2::new_from_ssl_vec3(tracked[0].pos),
+            vel: Some(Vec2::new_from_ssl_vec3(tracked[0].vel.unwrap_or_default())),
+          }),
         }
       }
     }
