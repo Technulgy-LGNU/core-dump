@@ -40,14 +40,21 @@ pub struct CpCommand {
     pub main_state: MainState,
     pub cmd_state: CmdState,
 
-
+    /// Flags
+    ///  - Bit 1: ...
+    pub flags: u32,
 }
 impl CpCommand {
     #[inline]
     pub fn encode(&self) -> Vec<u8> {
-        let mut buf = Vec::<u8>::with_capacity(1 + 1);
+        let mut buf = Vec::<u8>::with_capacity(
+            1 + // MainState
+                1 + // CmdState
+                4 // Flags
+        );
         buf.push(self.main_state as u8);
         buf.push(self.cmd_state as u8);
+        buf.extend_from_slice(&self.flags.to_le_bytes());
         buf
     }
 
@@ -67,6 +74,7 @@ impl CpCommand {
                 2 => CmdState::Goalie,
                 _ => CmdState::Unknown,
             },
+            flags: u32::from_le_bytes([data[2], data[3], data[4], data[5]]),
         }
     }
 }
