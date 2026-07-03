@@ -43,6 +43,7 @@ pub struct CpCommand {
 
 }
 impl CpCommand {
+    #[inline]
     pub fn encode(&self) -> Vec<u8> {
         let mut buf = Vec::<u8>::with_capacity(1 + 1);
         buf.push(self.main_state as u8);
@@ -50,6 +51,7 @@ impl CpCommand {
         buf
     }
 
+    #[inline]
     pub fn decode(data: Vec<u8>) -> CpCommand {
         CpCommand {
             main_state: match data[0] {
@@ -106,6 +108,7 @@ pub struct CpInfos {
     pub goal_width: u16,
 }
 impl CpInfos {
+    #[inline]
     pub fn encode(&self) -> Vec<u8> {
         let mut buf = Vec::<u8>::with_capacity(
             1 + // team
@@ -128,6 +131,7 @@ impl CpInfos {
         buf
     }
 
+    #[inline]
     pub fn decode(data: Vec<u8>) -> CpInfos {
         CpInfos {
             team: data[0],
