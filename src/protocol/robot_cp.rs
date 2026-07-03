@@ -1,6 +1,7 @@
 /// The message from the Robot to the CrashPilot
 /// Contains status mainly status information and some debug
 /// data.
+#[derive(Debug, Clone)]
 pub struct RobotCp {
   pub robot_id: u8,
   pub timestamp: u64,
@@ -30,6 +31,7 @@ pub struct RobotCp {
 }
 
 impl RobotCp {
+  #[inline]
   pub fn encode(&self) -> Vec<u8> {
     let mut buf = Vec::<u8>::with_capacity(
       1 + // robot_id
@@ -62,6 +64,7 @@ impl RobotCp {
     buf
   }
 
+  #[inline]
   pub fn decode(data: Vec<u8>) -> RobotCp {
     RobotCp {
       robot_id: data[0],

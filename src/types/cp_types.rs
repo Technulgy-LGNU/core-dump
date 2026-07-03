@@ -2,6 +2,7 @@ use crate::proto::{SslDetectionBall, Team, TrackedBall, TrackedFrame};
 use crate::vec::types::Vec2;
 
 /// Internal use generic robot
+#[derive(Debug, Copy, Clone)]
 pub struct Robot {
   pub robot_id: u8,
   /// 0 = Unknown, 1 = Yellow, 2 = Blue
@@ -32,6 +33,7 @@ impl Default for Robot {
 
 impl Robot {
   /// Takes all the robots and converts them to our own robot type
+  #[inline]
   pub fn new_from_tracked(frame: &TrackedFrame) -> (Vec<Robot>, Vec<Robot>) {
     let mut robots_yellow: Vec<Robot> = Vec::with_capacity(16);
     let mut robots_blue: Vec<Robot> = Vec::with_capacity(16);
@@ -91,6 +93,7 @@ pub struct Ball {
 }
 
 impl Ball {
+  #[inline]
   pub fn new_from_vis(
     raw: &Vec<SslDetectionBall>,
     tracked: &Vec<TrackedBall>,

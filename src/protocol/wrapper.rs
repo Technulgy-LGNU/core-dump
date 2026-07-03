@@ -6,6 +6,7 @@
 use crate::protocol::helpers::{crc32, verify_crc32};
 
 /// The Wrapper for incoming and outgoing messages
+#[derive(Debug, Clone)]
 pub struct MessageWrapper {
   /// Message length in bytes
   pub length: u32,
@@ -18,6 +19,7 @@ pub struct MessageWrapper {
 }
 
 impl MessageWrapper {
+  #[inline]
   pub fn encode(&mut self) -> Vec<u8> {
     let mut buf = Vec::<u8>::with_capacity(4 + self.data.len() + 4);
     buf.extend_from_slice(&self.length.to_le_bytes());
@@ -29,6 +31,7 @@ impl MessageWrapper {
     buf
   }
 
+  #[inline]
   pub fn decode(data: Vec<u8>) -> anyhow::Result<MessageWrapper> {
     // Decode message
     let msg = MessageWrapper {

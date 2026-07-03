@@ -1,3 +1,4 @@
+#[inline]
 pub fn crc32(data: &[u8]) -> u32 {
   let mut crc: u32 = 0xFFFF_FFFF;
 
@@ -16,6 +17,7 @@ pub fn crc32(data: &[u8]) -> u32 {
   !crc
 }
 
+#[inline]
 pub fn verify_crc32(data: &[u8], checksum: u32) -> bool {
   crc32(data) == checksum
 }
