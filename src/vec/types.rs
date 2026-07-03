@@ -1,5 +1,5 @@
 use crate::proto::{Vector2, Vector3};
-use num_traits::{NumCast, Zero};
+use num_traits::Zero;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -27,27 +27,25 @@ impl<T> Vec2<T> {
   pub fn new(x: T, y: T) -> Self {
     Self { x, y }
   }
+}
 
+impl Vec2<f32> {
   #[inline]
-  pub fn new_from_ssl_vec2(v: Vector2) -> Vec2<T>
-  where
-    T: NumCast + Copy,
-  {
-    Vec2 {
-      x: NumCast::from(v.x).unwrap(),
-      y: NumCast::from(v.y).unwrap(),
-    }
+  pub fn new_from_ssl_vec2(v: Vector2) -> Vec2<f32> {
+    Vec2::new(
+      // Multiplication with `1000` to convert to mm from m
+      v.x * 1000f32,
+      v.y * 1000f32,
+    )
   }
 
   #[inline]
-  pub fn new_from_ssl_vec3(v: Vector3) -> Vec2<T>
-  where
-    T: NumCast + Copy,
-  {
-    Vec2 {
-      x: NumCast::from(v.x).unwrap(),
-      y: NumCast::from(v.y).unwrap(),
-    }
+  pub fn new_from_ssl_vec3(v: Vector3) -> Vec2<f32> {
+    Vec2::new(
+      // Multiplication with `1000` to convert to mm from m
+      v.x * 1000.0,
+      v.y * 1000.0,
+    )
   }
 }
 
