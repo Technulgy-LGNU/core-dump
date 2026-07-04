@@ -1,8 +1,9 @@
+use serde::{Deserialize, Serialize};
 use crate::proto::{SslDetectionBall, Team, TrackedBall, TrackedFrame};
 use crate::vec::types::Vec2;
 
 /// Internal use generic robot
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub struct Robot {
   pub robot_id: u8,
   /// 0 = Unknown, 1 = Yellow, 2 = Blue
@@ -86,7 +87,7 @@ impl Robot {
 }
 
 /// Our Ball
-#[derive(Debug, Default, Copy, Clone)]
+#[derive(Debug, Default, Copy, Clone, Serialize, Deserialize)]
 pub struct Ball {
   pub pos: Vec2<f32>,
   pub vel: Option<Vec2<f32>>,
