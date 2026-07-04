@@ -34,13 +34,21 @@ pub struct CpRobot {
 }
 impl CpRobot {
   #[inline]
-  pub fn encode(&self) -> Vec<u8> {
-    todo!("Finish when CpCommand is finished")
+  pub fn encode(&self) -> anyhow::Result<Vec<u8>> {
+    Ok(postcard::to_extend(self, Vec::new())?)
   }
 
   #[inline]
-  pub fn decode(_data: Vec<u8>) -> CpRobot {
-    todo!("Finish when CpCommand is finished")
+  pub fn decode(data: &[u8]) -> anyhow::Result<CpRobot> {
+    let (message, remaining) = postcard::take_from_bytes(data)?;
+    if !remaining.is_empty() {
+      anyhow::bail!(
+        "cp_robot message has {} trailing bytes after postcard decode",
+        remaining.len()
+      );
+    }
+
+    Ok(message)
   }
 
   #[inline]
@@ -133,4 +141,77 @@ pub struct CpInfos {
   pub penalty_area_width: u16,
   pub penalty_area_height: u16,
   pub goal_width: u16,
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  fn message() -> CpRobot {
+    let mut other_robots = [None; 31];
+    other_robots[2] = Some(Robot {
+      robot_id: 2,
+      team: 1,
+      pos: Vec2::new(1200.0, -450.0),
+      vel: Some(Vec2::new(12.0, -4.0)),
+      orientation: 1.25,
+      angular_vel: Some(0.5),
+      visibility: 90,
+    });
+
+    CpRobot {
+      robot_id: 7,
+      timestamp: 123_456,
+      ball: Some(Ball {
+        pos: Vec2::new(100.0, 200.0),
+        vel: Some(Vec2::new(3.0, 4.0)),
+      }),
+      robot: None,
+      other_robots,
+      command: [None; 10],
+      infos: CpInfos {
+        team: 1,
+        side: -1,
+        width: 9000,
+        height: 6000,
+        runoff_width: 300,
+        penalty_area_width: 1000,
+        penalty_area_height: 2000,
+        goal_width: 1000,
+      },
+      flags: (1 << 0) | (1 << 15),
+    }
+  }
+
+  #[test]
+  fn postcard_round_trip() {
+    let message = message();
+
+    let encoded = message.encode().unwrap();
+    let decoded = CpRobot::decode(&encoded).unwrap();
+
+    assert_eq!(decoded.robot_id, message.robot_id);
+    assert_eq!(decoded.timestamp, message.timestamp);
+    assert_eq!(decoded.infos, message.infos);
+    assert!(decoded.enable_robot());
+    assert!(!decoded.enable_kicker());
+    assert!(decoded.kill_robot());
+
+    let ball = decoded.ball.unwrap();
+    assert_eq!(ball.pos.x, 100.0);
+    assert_eq!(ball.vel.unwrap().y, 4.0);
+
+    let other_robot = decoded.other_robots[2].unwrap();
+    assert_eq!(other_robot.robot_id, 2);
+    assert_eq!(other_robot.pos.y, -450.0);
+    assert_eq!(other_robot.vel.unwrap().x, 12.0);
+  }
+
+  #[test]
+  fn decode_rejects_trailing_bytes() {
+    let mut encoded = message().encode().unwrap();
+    encoded.push(0);
+
+    assert!(CpRobot::decode(&encoded).is_err());
+  }
 }
