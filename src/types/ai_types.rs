@@ -21,20 +21,23 @@ pub struct RobotState {
 pub type Robots = [Option<RobotState>; 16];
 
 
+#[derive(Debug, Copy, Clone)]
 pub enum Team {
     Own,
     Opp,
 }
 
+#[derive(Debug, Copy, Clone, Default)]
 pub enum GameStage {
     Running,
     Stop,
+    #[default]
     Halt,
     BallPlacement(Vec2<f32>, Team),
     PrepareKickoff,
     Kickoff,
     FreeKick,
-    Penalty,
+    PenaltyKick(Team),
     ShootOut(Team),
 }
 
@@ -46,6 +49,7 @@ pub struct World {
 }
 
 
+#[derive(Debug, Copy, Clone, Default)]
 pub struct GameState {
     pub world: World,
     pub stage: GameStage,
@@ -53,6 +57,7 @@ pub struct GameState {
 }
 
 
+#[derive(Debug, Clone, Copy, Default)]
 pub enum Intent {
     Goalie,
     PassTo(u8),
@@ -63,10 +68,13 @@ pub enum Intent {
     Steal,
     GetBallTurn,
     GetBallBehind,
+    SmashBall,
+    #[default]
     Hold,
 }
 
 
+#[derive(Debug, Clone, Copy, Default)]
 pub struct RobotCommand {
     pub dribbler: bool,
     pub raw_movement: bool,
@@ -75,13 +83,16 @@ pub struct RobotCommand {
     pub kicker: Kicker,
 }
 
+#[derive(Debug, Clone, Copy, Default)]
 pub struct Pos {
     pub pos: Vec2<f32>,
     pub face: Option<f32>,
     pub speed: Option<u32>,
 }
 
+#[derive(Debug, Clone, Copy, Default)]
 pub enum Kicker {
+    #[default]
     None,
     Chip(f32), //dist in mm
     Kick(f32), // dist in mm
