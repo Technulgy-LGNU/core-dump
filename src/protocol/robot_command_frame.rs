@@ -30,7 +30,7 @@ impl RobotCommandFrame {
   pub fn encode(&self) -> [u8; 164] {
     todo!("Implement encoding of RobotCommandFrame to bytes");
   }
-  
+
   pub fn decode(message: [u8; 164]) -> RobotCommandFrame {
     todo!("Implement decoding of bytes to RobotCommandFrame");
   }

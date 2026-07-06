@@ -6,7 +6,6 @@
 //? This is all without wrapper message
 //? Should be more than suitable for WiFi communication with a channel width of 40MHz
 
-
 //? This is the message containing
 //? all of the onboard sensor data
 //?
