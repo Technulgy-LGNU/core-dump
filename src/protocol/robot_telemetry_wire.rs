@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
 
 //? Size of message:
-//?   - Size of message: 16 Bytes
-//?   - Size for 12 robots: 16 * 12 = 192 Bytes
-//?   - Throughput at 500Hz: 192 Bytes * 500 = 96kB/s
-//?   - Throughput at 1000Hz: 192 Bytes * 1000 = 192kB/s
+//?   - Size of message: 17 Bytes
+//?   - Size for 12 robots: 17 * 12 = 204 Bytes
+//?   - Throughput at 500Hz: 204 Bytes * 500 = 102kB/s
+//?   - Throughput at 1000Hz: 204 Bytes * 1000 = 204kB/s
 //?
 //? This is all without wrapper message
 
@@ -14,11 +14,15 @@ pub struct RobotTelemetryWire {
   pub robot_id: u8,
   pub status: u8,
 
+  #[serde(with = "postcard::fixint::le")]
   pub seq_seen: u32,
 
   // Data from the onboard imu
+  #[serde(with = "postcard::fixint::le")]
   pub vx_mmps: i16,
+  #[serde(with = "postcard::fixint::le")]
   pub vy_mmps: i16,
+  #[serde(with = "postcard::fixint::le")]
   pub omega_mradps: i16,
 
   pub battery_mv: u8,
@@ -42,18 +46,25 @@ pub struct RobotTelemetryWire {
   ///   - Bit 14:
   ///   - Bit 15:
   ///   - Bit 16: Shutting down
+  #[serde(with = "postcard::fixint::le")]
   pub flags: u16,
 }
 
 impl RobotTelemetryWire {
+  pub const ENCODED_LEN: usize = 17;
+
   #[inline]
-  pub fn encode(&self) -> [u8; 16] {
-    todo!("Implement encoding of RobotTelemetryWire to bytes");
+  pub fn encode(&self) -> [u8; Self::ENCODED_LEN] {
+    let mut message = [0; Self::ENCODED_LEN];
+    let encoded = postcard::to_slice(self, &mut message)
+      .expect("RobotTelemetryWire should fit in its fixed postcard buffer");
+    debug_assert_eq!(encoded.len(), Self::ENCODED_LEN);
+    message
   }
 
   #[inline]
-  pub fn decode(message: [u8; 16]) -> Self {
-    todo!("Implement decoding of bytes to RobotTelemetryWire");
+  pub fn decode(message: [u8; Self::ENCODED_LEN]) -> Self {
+    postcard::from_bytes(&message).expect("RobotTelemetryWire fixed buffer should decode")
   }
 
   #[inline]
@@ -108,5 +119,31 @@ impl RobotTelemetryWire {
   #[inline]
   pub fn is_shutting_down(&self) -> bool {
     self.flags & (1 << 15) != 0
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn roundtrips_fixed_size_telemetry() {
+    let telemetry = RobotTelemetryWire {
+      robot_id: u8::MAX,
+      status: u8::MAX,
+      seq_seen: u32::MAX,
+      vx_mmps: i16::MIN,
+      vy_mmps: i16::MAX,
+      omega_mradps: -1234,
+      battery_mv: u8::MAX,
+      current: u8::MAX,
+      capacitor_v: u8::MAX,
+      flags: u16::MAX,
+    };
+
+    let encoded = telemetry.encode();
+
+    assert_eq!(encoded.len(), RobotTelemetryWire::ENCODED_LEN);
+    assert_eq!(RobotTelemetryWire::decode(encoded), telemetry);
   }
 }
