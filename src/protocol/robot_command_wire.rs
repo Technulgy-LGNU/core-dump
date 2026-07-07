@@ -15,15 +15,21 @@ use serde::{Deserialize, Serialize};
 pub struct RobotCommandWire {
   pub robot_id: u8,
   pub mode: u8,
+  #[serde(with = "postcard::fixint::le")]
   pub intent: u16,
 
   // Velocity in mm/s
+  #[serde(with = "postcard::fixint::le")]
   pub vx_mmps: i16,
+  #[serde(with = "postcard::fixint::le")]
   pub vy_mmps: i16,
   // Rotation in mrad/s
+  #[serde(with = "postcard::fixint::le")]
   pub omega_mradps: i16,
 
+  #[serde(with = "postcard::fixint::le")]
   pub kick_speed: u16,
+  #[serde(with = "postcard::fixint::le")]
   pub dribbler_speed: u16,
 
   /// Flags to execute specific robot stuff
@@ -38,6 +44,22 @@ pub struct RobotCommandWire {
   pub flags: u8,
 }
 impl RobotCommandWire {
+  pub const ENCODED_LEN: usize = 15;
+
+  #[inline]
+  pub fn encode(&self) -> [u8; Self::ENCODED_LEN] {
+    let mut message = [0; Self::ENCODED_LEN];
+    let encoded = postcard::to_slice(self, &mut message)
+      .expect("RobotCommandWire should fit in its fixed postcard buffer");
+    debug_assert_eq!(encoded.len(), Self::ENCODED_LEN);
+    message
+  }
+
+  #[inline]
+  pub fn decode(message: [u8; Self::ENCODED_LEN]) -> Self {
+    postcard::from_bytes(&message).expect("RobotCommandWire fixed buffer should decode")
+  }
+
   #[inline]
   pub fn kick(&self) -> bool {
     self.flags & (1 << 0) != 0
@@ -69,5 +91,30 @@ impl RobotCommandWire {
   #[inline]
   pub fn shutdown(&self) -> bool {
     self.flags & (1 << 7) != 0
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn roundtrips_fixed_size_command() {
+    let command = RobotCommandWire {
+      robot_id: u8::MAX,
+      mode: u8::MAX,
+      intent: u16::MAX,
+      vx_mmps: i16::MIN,
+      vy_mmps: i16::MAX,
+      omega_mradps: -1234,
+      kick_speed: u16::MAX,
+      dribbler_speed: u16::MAX,
+      flags: u8::MAX,
+    };
+
+    let encoded = command.encode();
+
+    assert_eq!(encoded.len(), RobotCommandWire::ENCODED_LEN);
+    assert_eq!(RobotCommandWire::decode(encoded), command);
   }
 }
