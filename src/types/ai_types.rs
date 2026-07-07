@@ -1,3 +1,5 @@
+mod sparse;
+
 use crate::vec::types::Vec2;
 
 #[derive(Debug, Clone, Copy, Default)]
@@ -53,14 +55,13 @@ pub struct World {
 pub struct GameState {
     pub world: World,
     pub stage: GameStage,
-
 }
 
 
 #[derive(Debug, Clone, Copy, Default)]
 pub enum Intent {
     Goalie,
-    PassTo(u8),
+    PassTo(Robot),
     RecPass,
     KickGoal,
     Block,
@@ -71,6 +72,26 @@ pub enum Intent {
     SmashBall,
     #[default]
     Hold,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum Robot {
+    R0 = 0,
+    R1 = 1,
+    R2 = 2,
+    R3 = 3,
+    R4 = 4,
+    R5 = 5,
+    R6 = 6,
+    R7 = 7,
+    R8 = 8,
+    R9 = 9,
+    R10 = 10,
+    R11 = 11,
+    R12 = 12,
+    R13 = 13,
+    R14 = 14,
+    R15 = 15,
 }
 
 
