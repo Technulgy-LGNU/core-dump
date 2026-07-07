@@ -23,14 +23,14 @@ pub enum Axis {
 
 impl<T> Vec2<T> {
   #[inline]
-  pub fn new(x: T, y: T) -> Self {
+  pub const fn new(x: T, y: T) -> Self {
     Self { x, y }
   }
 }
 
 impl Vec2<f32> {
   #[inline]
-  pub fn new_from_ssl_vec2(v: Vector2) -> Vec2<f32> {
+  pub const fn new_from_ssl_vec2(v: Vector2) -> Vec2<f32> {
     Vec2::new(
       // Multiplication with `1000` to convert to mm from m
       v.x * 1000f32,
@@ -39,7 +39,7 @@ impl Vec2<f32> {
   }
 
   #[inline]
-  pub fn new_from_ssl_vec3(v: Vector3) -> Vec2<f32> {
+  pub const fn new_from_ssl_vec3(v: Vector3) -> Vec2<f32> {
     Vec2::new(
       // Multiplication with `1000` to convert to mm from m
       v.x * 1000.0,
@@ -68,7 +68,7 @@ impl<T: Zero> Vec2<T> {
 
 impl<T> Vec3<T> {
   #[inline]
-  pub fn new(x: T, y: T, z: T) -> Self {
+  pub const fn new(x: T, y: T, z: T) -> Self {
     Self { x, y, z }
   }
 
