@@ -4,3 +4,6 @@ pub mod robot_command_wire;
 pub mod robot_debug_wire;
 pub mod robot_sensor_wire;
 pub mod robot_telemetry_wire;
+pub mod interface_command_wire;
+pub mod interface_data_wire;
+pub mod crashpilot_command_wrapper;
