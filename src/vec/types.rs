@@ -1,15 +1,14 @@
-use crate::proto::{CpVector2, Vector2};
-use num_traits::{NumCast, Zero};
+use crate::proto::{Vector2, Vector3};
+use num_traits::Zero;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Vec2<T> {
   pub x: T,
   pub y: T,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Vec3<T> {
   pub x: T,
   pub y: T,
@@ -27,39 +26,25 @@ impl<T> Vec2<T> {
   pub fn new(x: T, y: T) -> Self {
     Self { x, y }
   }
-
-  #[inline]
-  fn from_tuple(tuple: (T, T)) -> Self {
-    Self {
-      x: tuple.0,
-      y: tuple.1,
-    }
-  }
-
-  #[inline]
-  pub fn new_from_cp(v: Vector2) -> Self
-  where
-    T: From<f32>,
-  {
-    Self::new(T::from(v.x), T::from(v.y))
-  }
-
-  #[inline]
-  pub fn to_cp_vec2(self) -> CpVector2
-  where
-    T: NumCast + Copy,
-  {
-    CpVector2 {
-      x: NumCast::from(self.x).unwrap_or_default(),
-      y: NumCast::from(self.y).unwrap_or_default(),
-    }
-  }
 }
 
 impl Vec2<f32> {
   #[inline]
-  pub fn new_from_cp_vec2(v: CpVector2) -> Self {
-    Self::new(v.x as f32, v.y as f32)
+  pub fn new_from_ssl_vec2(v: Vector2) -> Vec2<f32> {
+    Vec2::new(
+      // Multiplication with `1000` to convert to mm from m
+      v.x * 1000f32,
+      v.y * 1000f32,
+    )
+  }
+
+  #[inline]
+  pub fn new_from_ssl_vec3(v: Vector3) -> Vec2<f32> {
+    Vec2::new(
+      // Multiplication with `1000` to convert to mm from m
+      v.x * 1000.0,
+      v.y * 1000.0,
+    )
   }
 }
 

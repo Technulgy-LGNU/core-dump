@@ -1,3 +1,4 @@
 pub mod proto;
-pub mod vec;
+pub mod protocol;
 pub mod types;
+pub mod vec;
