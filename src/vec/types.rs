@@ -98,3 +98,5 @@ impl<T: Zero> Vec3<T> {
     }
   }
 }
+
+pub type Mm = i16; // A millimeter in 0..32767 mm. 1 m = 1000 mm.
