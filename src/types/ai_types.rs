@@ -1,4 +1,4 @@
-mod sparse;
+pub mod sparse;
 
 use crate::vec::types::Vec2;
 

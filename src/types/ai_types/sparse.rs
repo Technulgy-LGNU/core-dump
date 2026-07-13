@@ -49,6 +49,3 @@ pub struct SparseGameState {
     pub world: SparseWorld,
     pub stage: SparseGameStage,
 }
-
-const SPARSE_ROBOT: usize = size_of::<SparseRobot>();
-const OPT_SPARSE_ROBOT: usize = size_of::<Option<SparseRobot>>();
