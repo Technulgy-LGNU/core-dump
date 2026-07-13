@@ -49,17 +49,9 @@ impl Robot {
             0
           },
           pos: Vec2::new_from_ssl_vec2(robot.pos),
-          vel: if let Some(vel) = robot.vel {
-            Some(Vec2::new_from_ssl_vec2(vel))
-          } else {
-            None
-          },
+          vel: robot.vel.map(Vec2::new_from_ssl_vec2),
           orientation: robot.orientation,
-          angular_vel: if let Some(vel_ang) = robot.vel_angular {
-            Some(vel_ang)
-          } else {
-            None
-          },
+          angular_vel: robot.vel_angular,
           visibility: if let Some(vis) = robot.visibility {
             vis.round() as u8
           } else {
@@ -96,8 +88,8 @@ pub struct Ball {
 impl Ball {
   #[inline]
   pub fn new_from_vis(
-    raw: &Vec<SslDetectionBall>,
-    tracked: &Vec<TrackedBall>,
+    raw: &[SslDetectionBall],
+    tracked: &[TrackedBall],
     raw_or_tracked: bool,
     test_field: Option<u8>,
   ) -> Option<Ball> {
@@ -164,11 +156,7 @@ impl Ball {
                 .filter(|ball| ball.pos.x.is_sign_positive())
                 .map(|ball| Ball {
                   pos: Vec2::new_from_ssl_vec3(ball.pos),
-                  vel: if let Some(vel) = ball.vel {
-                    Some(Vec2::new_from_ssl_vec3(vel))
-                  } else {
-                    None
-                  },
+                  vel: ball.vel.map(Vec2::new_from_ssl_vec3),
                 })
                 .collect();
 
@@ -183,11 +171,7 @@ impl Ball {
                 .filter(|ball| ball.pos.x.is_sign_negative())
                 .map(|ball| Ball {
                   pos: Vec2::new_from_ssl_vec3(ball.pos),
-                  vel: if let Some(vel) = ball.vel {
-                    Some(Vec2::new_from_ssl_vec3(vel))
-                  } else {
-                    None
-                  },
+                  vel: ball.vel.map(Vec2::new_from_ssl_vec3),
                 })
                 .collect();
 

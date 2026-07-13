@@ -28,7 +28,7 @@ pub struct CpRobot {
   /// Flags to enable//disable stuff on the robot
   ///   - Bit 1: Enable Robot
   ///   - Bit 2: Enable Kicker
-  ///   ...
+  ///   - ...
   ///   - Bit 16: Kill robot
   pub flags: u16,
 }
@@ -53,16 +53,16 @@ impl CpRobot {
 
   #[inline]
   pub fn enable_robot(&self) -> bool {
-    &self.flags & (1 << 0) != 0
+    self.flags & (1 << 0) != 0
   }
   #[inline]
   pub fn enable_kicker(&self) -> bool {
-    &self.flags & (1 << 1) != 0
+    self.flags & (1 << 1) != 0
   }
   // ...
   #[inline]
   pub fn kill_robot(&self) -> bool {
-    &self.flags & (1 << 15) != 0
+    self.flags & (1 << 15) != 0
   }
 }
 
@@ -92,15 +92,15 @@ pub struct CpCommand {
 impl CpCommand {
   #[inline]
   pub fn enable_dribbler(&self) -> bool {
-    &self.flags & (1 << 0) != 0
+    self.flags & (1 << 0) != 0
   }
   #[inline]
   pub fn orient_ball(&self) -> bool {
-    &self.flags & (1 << 1) != 0
+    self.flags & (1 << 1) != 0
   }
   #[inline]
   pub fn use_raw(&self) -> bool {
-    &self.flags & (1 << 2) != 0
+    self.flags & (1 << 2) != 0
   }
 }
 
