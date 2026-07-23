@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
 use crate::proto::{SslDetectionBall, Team, TrackedBall, TrackedFrame};
 use crate::vec::types::Vec2;
+use serde::{Deserialize, Serialize};
 
 /// Internal use generic robot
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
@@ -176,7 +176,7 @@ impl Ball {
                 .collect();
 
               if balls.is_empty() {
-                return None
+                return None;
               }
               Some(balls[0])
             }
