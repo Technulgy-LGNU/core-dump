@@ -1,6 +1,7 @@
 pub mod sparse;
 
 use crate::vec::types::Vec2;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct BallState {
@@ -74,8 +75,9 @@ pub enum Intent {
     Hold,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
 pub enum Robot {
+    #[default]
     R0 = 0,
     R1 = 1,
     R2 = 2,
