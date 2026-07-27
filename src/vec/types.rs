@@ -46,6 +46,14 @@ impl Vec2<f32> {
       v.y * 1000.0,
     )
   }
+
+  #[inline]
+  pub fn to_crashpilot_vec2(self) -> crate::proto::crashpilot::Vector2 {
+    crate::proto::crashpilot::Vector2 {
+      x: self.x as i32,
+      y: self.y as i32,
+    }
+  }
 }
 
 impl<T: Default> Default for Vec2<T> {
