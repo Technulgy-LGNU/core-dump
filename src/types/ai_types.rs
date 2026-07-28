@@ -24,7 +24,7 @@ pub struct RobotState {
 pub type Robots = [Option<RobotState>; 16];
 
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Team {
     Own,
     Opp,
