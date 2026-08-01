@@ -13,10 +13,7 @@ use serde::{Deserialize, Serialize};
 /// to control movement, etc
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 pub struct RobotCommandWire {
-  pub robot_id: u8,
-  pub mode: u8,
-  #[serde(with = "postcard::fixint::le")]
-  pub intent: u16,
+  pub intent: u8,
 
   // Velocity in mm/s
   #[serde(with = "postcard::fixint::le")]
@@ -27,10 +24,8 @@ pub struct RobotCommandWire {
   #[serde(with = "postcard::fixint::le")]
   pub omega_mradps: i16,
 
-  #[serde(with = "postcard::fixint::le")]
-  pub kick_speed: u16,
-  #[serde(with = "postcard::fixint::le")]
-  pub dribbler_speed: u16,
+  pub kick_speed: u8,
+  pub dribbler_speed: u8,
 
   /// Flags to execute specific robot stuff
   ///   - Bit 1: Kick
@@ -43,6 +38,27 @@ pub struct RobotCommandWire {
   ///   - Bit 8: Shutdown
   pub flags: u8,
 }
+
+// just a theoretical version, probably not practical in production
+#[allow(dead_code)]
+struct PackedCommand {
+  intent: u8,
+
+  // x and y velocity in 11bits + 1 signbit reslution. Value * 4mm/s
+  vx_mps: u8,
+  vxy_mps: u8,
+  vy_mps: u8,
+
+  // stored in -128..127 converted to mrad/s via 360*(omega_mradps/128)^3
+  omega_mradps: i8,
+
+  // 6bit for kick speed, 2bit for dribbler speed
+  kick_speed: u8,
+  
+  // 4 flags + 2 bit for the dribbler speed
+  flags: u8,
+}
+
 impl RobotCommandWire {
   pub const ENCODED_LEN: usize = 15;
 
