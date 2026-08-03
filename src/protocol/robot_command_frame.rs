@@ -61,17 +61,15 @@ mod tests {
       version: u8::MAX,
       frame_type: 2,
       seq: u16::MAX,
-      commands: std::array::from_fn(|robot_id| RobotCommandWire {
-        robot_id: robot_id as u8,
-        mode: u8::MAX,
-        intent: u16::MAX,
+      commands: [RobotCommandWire {
+        intent: u8::MAX,
         vx_mmps: i16::MIN,
         vy_mmps: i16::MAX,
         omega_mradps: -1234,
-        kick_speed: u16::MAX,
-        dribbler_speed: u16::MAX,
+        kick_speed: u8::MAX,
+        dribbler_speed: u8::MAX,
         flags: u8::MAX,
-      }),
+      }; _],
       crc32: u32::MAX,
     };
 
