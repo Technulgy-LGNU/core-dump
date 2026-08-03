@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 //? This is more efficient and reduces the overhead of sending multiple messages.
 
 /// Frame with all robot commands
-#[derive(Debug, Default, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct RobotCommandFrame {
   pub version: u8,
   pub frame_type: u8,
