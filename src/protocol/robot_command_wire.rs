@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 /// Robot Control Protocol
 /// Sends basic data to each robot
 /// to control movement, etc
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 pub struct RobotCommandWire {
   pub intent: u8,
 
@@ -117,14 +117,12 @@ mod tests {
   #[test]
   fn roundtrips_fixed_size_command() {
     let command = RobotCommandWire {
-      robot_id: u8::MAX,
-      mode: u8::MAX,
-      intent: u16::MAX,
+      intent: u8::MAX,
       vx_mmps: i16::MIN,
       vy_mmps: i16::MAX,
       omega_mradps: -1234,
-      kick_speed: u16::MAX,
-      dribbler_speed: u16::MAX,
+      kick_speed: u8::MAX,
+      dribbler_speed: u8::MAX,
       flags: u8::MAX,
     };
 
