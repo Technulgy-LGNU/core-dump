@@ -42,6 +42,13 @@ impl RobotCommandFrame {
   pub fn decode(message: [u8; Self::ENCODED_LEN]) -> RobotCommandFrame {
     postcard::from_bytes(&message).expect("RobotCommandFrame fixed buffer should decode")
   }
+
+  pub fn decode_slice(msg: &[u8]) -> Option<RobotCommandFrame> {
+    if msg.len() != Self::ENCODED_LEN {
+      return None;
+    }
+    postcard::from_bytes(msg).ok()
+  }
 }
 
 #[cfg(test)]
