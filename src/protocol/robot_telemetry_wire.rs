@@ -23,7 +23,7 @@ pub struct RobotTelemetryWire {
   #[serde(with = "postcard::fixint::le")]
   pub vy_mmps: i16,
   #[serde(with = "postcard::fixint::le")]
-  pub omega_mradps: i16,
+  pub orientation: u16,
 
   pub battery_mv: u8,
   pub current: u8,
@@ -134,7 +134,7 @@ mod tests {
       seq_seen: u32::MAX,
       vx_mmps: i16::MIN,
       vy_mmps: i16::MAX,
-      omega_mradps: -1234,
+      orientation: u16::MAX,
       battery_mv: u8::MAX,
       current: u8::MAX,
       capacitor_v: u8::MAX,
